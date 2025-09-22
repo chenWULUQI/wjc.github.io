@@ -47,3 +47,41 @@ Python 的 全局解释器锁（GIL） 会限制 CPU 多线程效率。多线程
 ### 3.明确入口点
 对大型项目来说，if __ name __ == "__ main __": 定义了程序的“入口点”，结构清晰。
 
+# 3.linux操作系统常用命令
+## 1.文件和目录操作
+### pwd 显示当前文件夹路径
+命令：pwd
+结果：/mnt/mnt/data/wjc
+### ls 列出当前文件夹下的文件和文件夹、ls -l 列出详细信息、ls-a 显示当前文件夹下的所有子目录与文件（包括隐藏文件）
+命令：ls
+结果：env  workspace
+
+命令：ls -l
+结果：total 12
+drwxrwxr-x 2 nvidia nvidia 4096 Sep 22 15:37 cc
+drwxrwxrwx 6 root   root   4096 Sep 18 13:50 env
+drwxrwxrwx 3 root   root   4096 Sep 19 11:01 workspace
+
+命令：ls-a
+结果：.  ..  cc  env  workspace
+### cd 切换目录、cd [目录路径]、cd .. 返回上级目录、cd ~切换到当前用户的主目录
+命令：cd env
+结果：nvidia@scs-agx-thor:/mnt/mnt/data/wjc/env$ 
+
+命令：cd ..
+结果：nvidia@scs-agx-thor:/mnt/mnt/data/wjc$
+
+命令：cd ~
+结果：nvidia@scs-agx-thor:~$ 
+### mkdir 新建目录
+命令：mkdir cc
+结果：nvidia@scs-agx-thor:/mnt/mnt/data/wjc$ ls
+c  cc  env  workspace
+### rmdir  删除空目录
+命令：rmdir cc
+结果：nvidia@scs-agx-thor:/mnt/mnt/data/wjc$ ls
+c  env  workspace
+### rm -r 删除目录及目录内的文件
+
+
+
