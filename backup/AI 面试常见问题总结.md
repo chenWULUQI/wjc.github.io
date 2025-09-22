@@ -37,7 +37,7 @@ Python 的 全局解释器锁（GIL） 会限制 CPU 多线程效率。多线程
 <img width="613" height="300" alt="Image" src="https://github.com/user-attachments/assets/a43cce4f-c96d-498a-971d-66e1084fcb1d" />
 
 # 2.python中为什么要这样写？if  __ name __ == "__ main __":main()
-这个写法在模块化开发和脚本复用中非常重要，首先每个 Python 文件都是一个模块（module）。在脚本复用时Python 会为每个模块生成一个内置变量 __ name __。当我们直接执行脚本时：__ name __ 会被赋值="__ main __"，此时我们会运行main中的主体函数。如果其他模块导入：__ name __ 会被赋值当前模块的名字 （文件名去掉 .py），此时我们不会运行main中的主体函数。
+这个写法在模块化开发和脚本复用中非常重要，首先每个 Python 文件都是一个模块（module）。在脚本复用时Python 会为每个模块生成一个内置变量  __ name __ 。当我们直接执行脚本时： __ name __ 会被赋值=" __ main __ "，此时我们会运行main中的主体函数。如果其他模块导入：__ name __ 会被赋值当前模块的名字 （文件名去掉 .py），此时我们不会运行main中的主体函数。
 
 ## 作用
 ### 1.避免导入副作用
