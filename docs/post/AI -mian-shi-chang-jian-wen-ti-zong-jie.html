@@ -118,35 +118,12 @@ Web 开发：Django, Flask<br>
 <p>对大型项目来说，if __ name __ == "__ main __": 定义了程序的“入口点”，结构清晰。</p>
 <h1>3.linux操作系统常用命令</h1>
 <h2>1.文件和目录操作</h2>
-<h3>pwd 显示当前文件夹路径</h3>
-<p>命令：pwd<br>
-结果：/mnt/mnt/data/wjc</p>
-<h3>ls 列出当前文件夹下的文件和文件夹、ls -l 列出详细信息、ls-a 显示当前文件夹下的所有子目录与文件（包括隐藏文件）</h3>
-<p>命令：ls<br>
-结果：env  workspace</p>
-<p>命令：ls -l<br>
-结果：total 12<br>
-drwxrwxr-x 2 nvidia nvidia 4096 Sep 22 15:37 cc<br>
-drwxrwxrwx 6 root   root   4096 Sep 18 13:50 env<br>
-drwxrwxrwx 3 root   root   4096 Sep 19 11:01 workspace</p>
-<p>命令：ls-a<br>
-结果：.  ..  cc  env  workspace</p>
-<h3>cd 切换目录、cd [目录路径]、cd .. 返回上级目录、cd ~切换到当前用户的主目录</h3>
-<p>命令：cd env<br>
-结果：nvidia@scs-agx-thor:/mnt/mnt/data/wjc/env$</p>
-<p>命令：cd ..<br>
-结果：nvidia@scs-agx-thor:/mnt/mnt/data/wjc$</p>
-<p>命令：cd ~<br>
-结果：nvidia@scs-agx-thor:~$</p>
+<h3>pwd：显示当前文件夹路径</h3>
+<h3>ls：列出当前文件夹下的文件和文件夹、ls -l：列出详细信息、ls-a：显示当前文件夹下的所有子目录与文件（包括隐藏文件）</h3>
+<h3>cd [目录路径]：切换到该目录、cd ..：返回上级目录、cd ~：切换到当前用户的主目录</h3>
 <h3>mkdir 新建目录</h3>
-<p>命令：mkdir cc<br>
-结果：nvidia@scs-agx-thor:/mnt/mnt/data/wjc$ ls<br>
-c  cc  env  workspace</p>
-<h3>rmdir  删除空目录</h3>
-<p>命令：rmdir cc<br>
-结果：nvidia@scs-agx-thor:/mnt/mnt/data/wjc$ ls<br>
-c  env  workspace</p>
-<h3>rm -r 删除目录及目录内的文件</h3></div>
+<h3>rmdir  删除空目录（若该目录下还有文件则无法删除）</h3>
+<h3>rm -r 删除目录及目录内的文件、rm -ri逐个询问每个文件是否要删除、rm -v输出删除文件名称</h3></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
