@@ -55,6 +55,16 @@ Python 的 全局解释器锁（GIL） 会限制 CPU 多线程效率。多线程
 ### mkdir 新建目录
 ### rmdir  删除空目录（若该目录下还有文件则无法删除）
 ### rm -r 删除目录及目录内的文件、rm -ri逐个询问每个文件是否要删除、rm -v输出删除文件名称
+### cp 复制目录、cp file1.txt file2.txt：把 file1.txt 复制为 file2.txt、cp file1.txt/home/user/Documents/：将 file1.txt 复制到 /home/user/Documents/ 目录下、cp -r:递归复制整个目录、cp -i：交互模式
+### mv 移动或重命名文件及目录、mv oldname.txt newname.txt：重命名、mv file.txt /home/user/Documents/：移动文件到目录
+### find . -name "*.txt"：查找当前目录下的 .txt 文件、find /var/log -type d：查找 /var/log 下的目录（d为目录，f为文件）、find . -name "*.tmp" -exec rm -f {} \;：查找并删除 .tmp 文件、find . -name "*.jpg" -exec mv {} ./images/ \;：查找并移动所有 .jpg 文件到 images 文件夹（ \; 用于结束 -exec，必须写）
+
+## 2.文件查看与编辑
+### 
+
+
+
+# 4.
 
 
 
