@@ -140,7 +140,20 @@ Web 开发：Django, Flask<br>
 <p>GET参数暴露在 URL 里，不适合传输密码等敏感信息。可能被缓存或记录在浏览器历史中。<br>
 POST参数在请求体中，相对更安全，但仍需 HTTPS 加密 才能真正保证安全。</p>
 <h2>5. 幂等性</h2>
-<p>GET幂等：多次请求结果相同（只是获取数据，不应有副作用）。POST非幂等：每次请求可能导致服务器状态变化（比如重复下单）。</p></div>
+<p>GET幂等：多次请求结果相同（只是获取数据，不应有副作用）。POST非幂等：每次请求可能导致服务器状态变化（比如重复下单）。</p>
+<h1>5.Cookies与Session</h1>
+<h2>Cookies</h2>
+<p>定义：Cookies 是存储在 客户端（浏览器） 上的一小段文本数据，由服务器发送给浏览器，浏览器会在之后的请求中自动携带这些数据。<br>
+作用：<br>
+保存用户偏好设置（如语言、主题）。<br>
+记录用户行为（如访问记录、广告跟踪）。<br>
+维持会话状态（存储 SessionID，让服务器识别用户身份）。</p>
+<h2>Session</h2>
+<p>定义：Session 是存储在服务器端 的一份用户会话数据，用来记录用户的状态和信息。每个用户会分配一个唯一的 SessionID，通常通过 Cookie 在客户端和服务器之间传递。<br>
+作用：<br>
+保存用户登录信息（用户名、权限等）。<br>
+维持用户会话状态（如购物车、浏览历史）。<br>
+提供比 Cookie 更安全的敏感数据存储方式。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
