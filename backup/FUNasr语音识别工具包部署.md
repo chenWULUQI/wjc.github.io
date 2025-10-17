@@ -1,14 +1,21 @@
-# 一. FATE简介
-FATE(Federated AI Technology Enabler)是一个开源的联邦学习平台,由微众银行、华为等公司共同开发,于2019年正式开源发布。旨在为用户提供一个安全可靠的联邦学习框架,帮助各行业的企业和组织在保护隐私的前提下,实现数据共享与协同训练模型。其设计理念是基于联邦学习,通过分布式计算和差分隐私等技术,实现在不共享隐私数据的情况下进行模型训练和预测。这不仅可以保护用户隐私,还能充分利用各方的数据优势,构建更加准确的AI模型。同时FATE提供了丰富的算法库和灵活的API,支持各种机器学习任务,为用户带来了极大的便利。
+# 一. FunASR简介
+FunASR是一个基础语音识别工具包，提供多种功能，包括语音识别（ASR）、语音端点检测（VAD）、标点恢复、语言模型、说话人验证、说话人分离和多人对话语音识别等。FunASR提供了便捷的脚本和教程，支持预训练好的模型的推理与微调。
 
-FATE的主要特点包括:
-I. 隐私保护: 采用联邦学习和差分隐私技术,保护参与方的隐私数据不被泄露;
-II. 分布式训练: 支持多方参与的分布式模型训练,无需共享隐私数据;
-III. 跨行业应用: 提供丰富的机器学习算法,支持金融、医疗、政务等多个行业的应用场景;
-IV. 灵活性: 拥有可扩展的架构设计,支持自定义算法和应用系统的集成;
-V. 开源开放: 遵循Apache-2.0开源协议,代码和文档全面开放,拥有活跃的开发者社区。
-
-## 1.安装部署
-新建conda环境
-
+# 二.安装部署
+## 1.新建conda环境
+`conda` create -n funasr `python==3.11.0`
+`conda activate funasr`
+## 2.安装对应pytorch及各项依赖库（检查当前cuda版本）
+`nvidia-smi`
+`pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu129`
+`pip install torchaudio`
+`pip3 install -U funasr`
+`pip3 install -U modelscope huggingface huggingface_hub`
+`pip install websockets==12.0`
+`pip install pyaudio`
+## 3.启动 funasr服务端
+`cd runtime/python/websocket`
+`python funasr_wss_server.py --port 10095`
+## 4.启动 funasr客户端
+`python funasr_wss_client.py --host "0.0.0.0" --port 10095 --mode online --chunk_size "5,10,5" --audio_in "./data/v.wav" --output_dir "./results"`
      
