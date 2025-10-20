@@ -109,8 +109,8 @@ docker run -d -p 27017:27017 \
 
 ### 查看容器列表
 `docker ps` 
-CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS     NAMES
-48fe482ecff2   nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   80/tcp    cool_hodgkin
+CONTAINER ID   IMAGE     COMMAND                   CREATED                     STATUS                     PORTS     NAMES
+48fe482ecff2      nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   80/tcp    cool_hodgkin
 ps 是 Process Status (进程状态) 的缩写，也是 Linux 上的一个经典命令，用于查看进程的状态信息。这一命令也被继承到 Docker 里面了
 这些列含义如下：
 CONTAINER ID 容器 ID，每个容器在创建时会生成一个唯一的 ID
@@ -127,7 +127,7 @@ NAMES 容器的名字，如果创建容器时没有指定名字，系统就会�
 `docker start {容器标识}`
 ### 停止容器
 `docker stop {容器标识}`
-使用 start 启停容器的时候，不需要再传递创建容器时的 端口映射、挂载卷、环境变量等参数都不需要重新写了，docker 已经自动保存了，重新启动可以按照原因运行。
+使用 start 启停容器的时候，不需要再传递创建容器时的 端口映射、挂载卷、环境变量等参数都不需要重新写了，docker 已经自动保存了，重新启动可以按照原例运行。
 
 ### 删除容器
 `docker rm {容器标识}`
@@ -153,8 +153,10 @@ NAMES 容器的名字，如果创建容器时没有指定名字，系统就会�
 
 ### Docker 卷
 docker volume 命令用于管理 Docker 卷（volume）。卷是用于持久化数据的文件系统，可以将数据和应用程序分离，便于管理，可以在容器之间共享和重用。同时卷可以用于数据的备份和恢复。
+
 ### 创建卷
 `docker volume create {卷名称}`
+
 ### 查看卷信息
 `docker volume inspect nginx_html`
 ```
@@ -170,6 +172,7 @@ docker volume 命令用于管理 Docker 卷（volume）。卷是用于持久化�
     }
 ]
 ```
+
 ### 查看所有卷
 `docker volume list`
 
@@ -185,6 +188,7 @@ local         nginx_html
 ### Dockerfile
 Dockerfile 是一个用来 构建镜像文件的文本文件，Dockerfile 文件内包含了构建镜像所需的各种信息。
 在项目目录下创建一个名为 Dockerfile 的文件，并在文件中编写镜像构成的信息。
+```
 # 选择一个基础镜像作为运行环境
 FROM python:3.13-slim
 # 在镜像内切换一个工作目录，后续所有的操作都是基于这个目录来的
@@ -201,9 +205,10 @@ EXPOSE 8000
 
 # 容器内服务启动命令，每次启动时容器内会自动执行这个命令
 CMD ["python3","main.py"]
-项目内容
-main.py
-
+```
+### main.py内容
+```
+# main.py
 from fastapi import FastAPI
 import uvicorn
 app = FastAPI()
@@ -214,15 +219,15 @@ def read_root():
 
 if __name__ == "__main__":
     uvicorn.run(app,host='0.0.0.0',port=8000)
-requirements.txt
+```
 
-fastapi
-uvicorn
-构建镜像
+### 构建镜像
 
 Dockerfile 文件写好了，可以使用 docker build 构建镜像。
 
-PS E:\docker\demo> docker build -t docker_test .
+`PS E:\docker\demo> docker build -t docker_test .`
+
+```
 [+] Building 65.7s (9/9) FINISHED                                                                                                                                                                                                                                  docker:desktop-linux
  => [internal] load build definition from Dockerfile                                                                                                                                                                                                                               0.0s
  => => transferring dockerfile: 616B                                                                                                                                                                                                                                               0.0s
@@ -244,16 +249,20 @@ PS E:\docker\demo> docker build -t docker_test .
  => => exporting manifest list sha256:1bfb1d56ae1e7a710f2f6277d9c2a6b2b746e6710a83b1792bea01ef7bbec520                                                                                                                                                                             0.0s
  => => naming to docker.io/library/docker_test:latest                                                                                                                                                                                                                              0.0s
  => => unpacking to docker.io/library/docker_test:latest    
-创建容器并运行
-
+```
+### 创建容器并运行
+```
 PS E:\docker\demo> docker run -d -p 8000:8000 docker_test
 22fd617066ad0f95b1a664257f4c00a6dc1b60d9de7c894f8940f24b34859629
+```
+```
 PS E:\docker\demo> docker ps -a
 CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS                     PORTS                                         NAMES
 22fd617066ad   docker_test   "python3 main.py"        4 seconds ago   Up 4 seconds               0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp   sharp_banach
+```
+
+```
 PS E:\docker\demo> curl http://127.0.0.1:8000
-
-
 StatusCode        : 200
 StatusDescription : OK
 Content           : {"hello":"dbkuaizi"}
@@ -271,75 +280,47 @@ InputFields       : {}
 Links             : {}
 ParsedHtml        : System.__ComObject
 RawContentLength  : 20
-Docker 网络
+```
+
+### Docker 网络
 桥接模式
-Docker 网络 默认 Bridge（桥接模式），所有的容器都连接到这个网络中，每一个容器都分配了一个内部的 IP 地址，一般都是 172.17 开头。在这个内部子网里面，容器可以通过内部 IP 地址互相访问。
+Docker网络默认Bridge（桥接模式），所有的容器都连接到这个网络中，每一个容器都分配了一个内部的IP地址，一般都是 172.17 开头。在这个内部子网里面，容器可以通过内部IP地址互相访问。但容器网络和宿主机的网络是隔离的，可以使用 docker network create 命令创建子网，默认情况下，子网也是桥接模式的一种，然后可以指定容器加入不同的子网，同一个子网内的容器可以互相通信，而跨子网则不可以通信。使用子网还有一个好处，同一个子网内的容器，可以直接使用容器名称互相访问，而不必使用内部的 IP 地址。
 
-但容器网络和宿主机的网络是隔离的，可以使用 docker network create 命令创建子网，默认情况下，子网也是桥接模式的一种，然后可以指定容器加入不同的子网，同一个子网内的容器可以互相通信，而跨子网则不可以通信。
+### 创建一个 名叫 network1 的子网
+`docker network create network1`
 
-使用子网还有一个好处，同一个子网内的容器，可以直接使用容器名称互相访问，而不必使用内部的 IP 地址。
+### 创建一个nginx容器使用network1的子网
+`docker run -d --network network1 nginx`
 
-# 创建一个 名叫 network1 的子网
-docker network create network1
+### HOST 模式
+host 模式下，docker容器直接共享宿主机的网络，容器直接使用宿主机的IP地址，无需 -p 参数进行端口映射，容器内的服务直接运行在宿主机的端口上，通过宿主机的 IP 和端口就能访问到容器中服务。
+`docker run -d --network host nginx`
 
-# 创建一个 nginx 容器 使用 network1 的子网
-docker run -d --network network1 nginx
-116224390346617.webp
-
-HOST 模式
-host 模式下，docker 容器直接共享宿主机的网络，容器直接使用宿主机的 IP 地址，无需 -p 参数进行端口映射，容器内的服务直接运行在宿主机的端口上，通过宿主机的 IP 和端口就能访问到容器中服务。
-
-docker run -d --network host nginx
-NONE 模式
+### NONE 模式
 这个模式表示不联网
 
-控制命令
-创建网络
+### 创建网络
+`docker network create network1`
 
-docker network create network1
-查看网络
-
-PS C:\Users\Administrator> docker network list
-NETWORK ID     NAME       DRIVER    SCOPE
-d30095b3bc13   bridge     bridge    local
-24b646446630   host       host      local
-a26161c3eff2   network1   bridge    local
-7800c9b21eb6   none       null      local
+### 查看网络
+`docker network list`
+```
+NETWORK ID       NAME          DRIVER      SCOPE
+d30095b3bc13     bridge         bridge        local
+24b646446630     host             host           local
+a26161c3eff2       network1     bridge        local
+7800c9b21eb6     none            null            local
+```
 除了我们创建的模式以外，还有 Docker 自带的三种模式，需要注意的是 这三个自带的网络模式是不可删除的
 
-删除网络
+### 删除网络
+`docker network rm network1`
 
-docker network rm network1
-Docker Compose
-有的时候 一个完整的应用可能会是很多部分组成的，例如前端、后端、数据库 以及各种附加的技术栈，这些东西应该如何容器化呢？
-
-我们可以自然的想到，将这些模块都打包在一起，做成一个巨大的容器。但这样做有一个弊端，只要其中一个模块发生故障，例如 服务端内存泄露，可能会导致整个容器都崩溃挂掉。
-
-并且这样做的可伸缩性差，如果想给系统做扩容，只能把整个大容器在复制一份，做不到对某个模块的精确扩容。
-
-多应用的最佳实践，是把每一个模块都打包成一个独立的容器。但这样多容器 增加了很多使用成本，因为想创建多个 容器 就要多次使用 docker run ，还需要配置容器之间的网络环境，尝试管理这些容器时，一个遗漏就会导致很多问题，并且若让其他人部署项目，如果操作者对部署流程不熟悉 也会导致各种问题的发生。
-
-这个时候，容器编排技术就很有用了，也就是 Docker Compose，它使用 yml 文件 管理多个容器，在这个文件中记录了容器之间时如何创建以及如何协同工作的，我们可以简单的把 Docker Compose 文件理解成一个或多个 Docker run 命令，按照特定的格式书写到一个文件中，
-
-Docker Compose 格式如下：
-
-254110120740349.webp
-
-右侧最顶级的就是 Services 元素，每个元素就对应一个 Services
-左侧的 --name 在右侧就变成了 services 名
-左侧的镜像名，在右侧写在了 image: 属性后面
-左侧的 -e 参数，对应右边的 environments
-左侧的 -v 对应右侧的 volume 也就是挂载卷。
-左侧的 -p 对应右边的 ports
-右侧的 depends_on 用来表示启动顺序关系，这里表示 my_mongodb_express 容器，依赖 my_mongodb 。这时 程序会先启动 mongodb 再启动荣亲
-左右两边唯一的区别是：左边自定义了一个子网 network1 ，而右边没有。同一个 compose 文件中，定义的所有容器都会自动加入同一个子网，不用我们额外维护。
-
-我们可以借助 AI 来生成 需要的 Compose 文件，而无需手动编写。
-
-使用 Compose
-
+### Docker Compose
+有的时候一个完整的应用可能会是很多部分组成的，例如前端、后端、数据库 以及各种附加的技术栈，这些东西应该如何容器化呢？我们可以自然的想到，将这些模块都打包在一起，做成一个巨大的容器。但这样做有一个弊端，只要其中一个模块发生故障，例如服务端内存泄露，可能会导致整个容器都崩溃挂掉。并且这样做的可伸缩性差，如果想给系统做扩容，只能把整个大容器在复制一份，做不到对某个模块的精确扩容。多应用的最佳实践，是把每一个模块都打包成一个独立的容器。但这样多容器增加了很多使用成本，因为想创建多个容器 就要多次使用 docker run ，还需要配置容器之间的网络环境，尝试管理这些容器时，一个遗漏就会导致很多问题，并且若让其他人部署项目，如果操作者对部署流程不熟悉 也会导致各种问题的发生。这个时候，容器编排技术就很有用了，也就是 Docker Compose，它使用 yml 文件管理多个容器，在这个文件中记录了容器之间时如何创建以及如何协同工作的，我们可以简单的把 Docker Compose 文件理解成一个或多个 Docker run 命令，按照特定的格式书写到一个文件中。
+### Docker Compose使用方法
 在启动目录下创建 docker-compose.yaml 文件，内容如下：
-
+```
 services:
   my_mongodb:
     image: mongo
@@ -359,93 +340,21 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: pass
     depends_on:
       - my_mongodb
-创建并运行启动
+```
+创建并运行启动，然后执行 docker compose up -d 运行，如果容器已经在运行了 重复执行这个命令不会有任何效果。执行该命令时，会检测当前目录下名为 docker-compose.yaml 或 compose.yaml 文件。可以通过 docker compose -f tesst.yaml up -d 指定 compose 文件。
 
-然后执行 docker compose up -d 运行，如果容器已经在运行了 重复执行这个命令不会有任何效果。
+### 停止并删除
+`docker compose down `
+命令会停止并删除容器
+                                           
+### 停止不删除
+`docker compose stop `
+命令会停止并且不会删除容器
 
-执行该命令时，会检测当前目录下 名为 docker-compose.yaml 或 compose.yaml 文件。可以通过 docker compose -f tesst.yaml up -d 指定 compose 文件。
-
-PS E:\dbkuaizi\mongodb> docker compose up -d
-[+] Running 3/3
- ✔ Network mongodb_default                 Created                                                                 0.0s
- ✔ Container mongodb-my_mongodb-1          Started                                                                 0.6s
- ✔ Container mongodb-my_mongodb_express-1  Started                                                                 0.7s
-PS E:\dbkuaizi\mongodb>
-停止并删除
-
-docker compose down 命令会停止并删除容器
-
-PS E:\docker\mongodb> docker compose down
-time="2025-09-18T21:47:55+08:00" level=warning msg="E:\\docker\\mongodb\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
-[+] Running 3/3
- ✔ Container mongodb-my_mongodb_express-1  Removed                                                                 0.3s
- ✔ Container mongodb-my_mongodb-1          Removed                                                                 0.3s
- ✔ Network mongodb_default                 Removed                                                                 0.4s
-停止不删除
-
-docker compose stop 命令会停止并且不会删除容器
-
-启动
-
-docker compose start 命令会启动停止的容器
+### 启动
+`docker compose start `
+命令会启动停止的容器
 
 
 
-## 7. Docker Compose - 多容器编排
-
-
-
-*  **背景**: 当一个完整的应用由多个模块（如前端、后端、数据库）组成时，若将所有模块打包成一个巨大容器，会导致故障蔓延、伸缩性差。若每个模块独立容器化，则管理多个容器（创建、网络配置）会增加复杂性。
-
-*  **解决方案**: Docker Compose是一种轻量级的容器编排技术，用于管理多个容器的创建和协同工作。
-
-*  **核心**: 使用YAML文件（通常命名为`docker-compose.yml`）定义多服务应用。
-
-*  **YAML文件结构**: 可视为多个`docker run`命令按照特定格式组织在一个文件中。
-
-  *  `services`: 顶级元素，每个服务对应一个容器。
-
-  *  服务名称（如`mongodb`）: 对应`docker run`中的`--name`，作为容器名的一部分。
-
-  *  `image`: 对应`docker run`中的镜像名。
-
-  *  `environment`: 对应`docker run`的`-e`参数。
-
-  *  `volumes`: 对应`docker run`的`-v`参数。
-
-  *  `ports`: 对应`docker run`的`-p`参数。
-
-  *  **网络**: Docker Compose会自动为每个Compose文件创建一个默认子网，文件中定义的所有容器都会自动加入此子网，并可通过服务名称互相访问。
-
-  *  `depends_on`: 定义容器的启动顺序，确保依赖服务先启动。
-
-*  **AI辅助**: 可借助AI工具生成等价的Docker Compose文件。
-
-*  **Docker Compose命令**:
-
-  *  `docker compose up`: 启动YAML文件中定义的所有服务（容器）。
-
-    *  `-d`: 后台运行。
-
-    *  会自动创建子网和容器。
-
-  *  `docker compose down`: 停止并删除由Compose文件定义的所有服务和网络。
-
-  *  `docker compose stop`: 仅停止服务，不删除容器。
-
-  *  `docker compose start`: 启动已停止的服务。
-
-  *  `docker compose -f <文件名.yml> up`: 指定非标准文件名的Compose文件进行操作。
-
-*  **适用场景**: Docker Compose适合个人使用和单机运行的轻量级容器编排需求。
-
-*  **与Kubernetes对比**: Kubernetes是企业级服务器集群和大规模容器编排的解决方案，功能更为复杂。
-
-
-
-## 8. 总结
-
-
-
-以上内容涵盖了Docker的核心概念、在不同操作系统上的安装方法、常用的镜像与容器管理命令、Dockerfile的编写与镜像构建流程、Docker的多种网络模式，以及轻量级多容器编排工具Docker Compose的使用。这些是理解和应用Docker的关键知识点。
 

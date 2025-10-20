@@ -176,8 +176,8 @@ error during connect: Get "http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.5
 与 run 命令功能类似，区别在于只创建容器，不自动启动。</p>
 <h3>查看容器列表</h3>
 <p><code class="notranslate">docker ps</code><br>
-CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS     NAMES<br>
-48fe482ecff2   nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   80/tcp    cool_hodgkin<br>
+CONTAINER ID   IMAGE     COMMAND                   CREATED                     STATUS                     PORTS     NAMES<br>
+48fe482ecff2      nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   80/tcp    cool_hodgkin<br>
 ps 是 Process Status (进程状态) 的缩写，也是 Linux 上的一个经典命令，用于查看进程的状态信息。这一命令也被继承到 Docker 里面了<br>
 这些列含义如下：<br>
 CONTAINER ID 容器 ID，每个容器在创建时会生成一个唯一的 ID<br>
@@ -193,7 +193,7 @@ NAMES 容器的名字，如果创建容器时没有指定名字，系统就会�
 <p><code class="notranslate">docker start {容器标识}</code></p>
 <h3>停止容器</h3>
 <p><code class="notranslate">docker stop {容器标识}</code><br>
-使用 start 启停容器的时候，不需要再传递创建容器时的 端口映射、挂载卷、环境变量等参数都不需要重新写了，docker 已经自动保存了，重新启动可以按照原因运行。</p>
+使用 start 启停容器的时候，不需要再传递创建容器时的 端口映射、挂载卷、环境变量等参数都不需要重新写了，docker 已经自动保存了，重新启动可以按照原例运行。</p>
 <h3>删除容器</h3>
 <p><code class="notranslate">docker rm {容器标识}</code><br>
 使用 rm 命令可以删除容器，如果要删除运行中的容器 需要加 -f 参数强制删除。</p>
@@ -240,240 +240,147 @@ local         nginx_html</p>
 <h3>Dockerfile</h3>
 <p>Dockerfile 是一个用来 构建镜像文件的文本文件，Dockerfile 文件内包含了构建镜像所需的各种信息。<br>
 在项目目录下创建一个名为 Dockerfile 的文件，并在文件中编写镜像构成的信息。</p>
-<h1>选择一个基础镜像作为运行环境</h1>
-<p>FROM python:3.13-slim</p>
-<h1>在镜像内切换一个工作目录，后续所有的操作都是基于这个目录来的</h1>
-<p>WORKDIR /app</p>
-<h1>将项目文件拷贝到镜像的工作目录</h1>
-<h1>第一个 “.” 代表当前目录，第二个 “.” 代表镜像的工作目录</h1>
-<p>COPY . .</p>
-<h1>安装容器内环境需要的依赖</h1>
-<p>RUN pip install -r requirements.txt</p>
-<h1>声明对外提供服务的端口是哪个</h1>
-<p>EXPOSE 8000</p>
-<h1>容器内服务启动命令，每次启动时容器内会自动执行这个命令</h1>
-<p>CMD ["python3","main.py"]<br>
-项目内容<br>
-main.py</p>
-<p>from fastapi import FastAPI<br>
-import uvicorn<br>
-app = FastAPI()</p>
-<p>@app.get("/")<br>
-def read_root():<br>
-return {"hello":"dbkuaizi"}</p>
-<p>if <strong>name</strong> == "<strong>main</strong>":<br>
-uvicorn.run(app,host='0.0.0.0',port=8000)<br>
-requirements.txt</p>
-<p>fastapi<br>
-uvicorn<br>
-构建镜像</p>
-<p>Dockerfile 文件写好了，可以使用 docker build 构建镜像。</p>
-<p>PS E:\docker\demo&gt; docker build -t docker_test .<br>
-[+] Building 65.7s (9/9) FINISHED                                                                                                                                                                                                                                  docker:desktop-linux<br>
-=&gt; [internal] load build definition from Dockerfile                                                                                                                                                                                                                               0.0s<br>
-=&gt; =&gt; transferring dockerfile: 616B                                                                                                                                                                                                                                               0.0s<br>
-=&gt; [internal] load metadata for docker.io/library/python:3.13-slim                                                                                                                                                                                                                0.0s<br>
-=&gt; [internal] load .dockerignore                                                                                                                                                                                                                                                  0.0s<br>
-=&gt; =&gt; transferring context: 2B                                                                                                                                                                                                                                                    0.0s<br>
-=&gt; [1/4] FROM docker.io/library/python:3.13-slim@sha256:1bca0202e953784ac2a1daf36ebbc9cbebed48afcfba12d1225aaab3793eca33                                                                                                                                                          0.0s<br>
-=&gt; =&gt; resolve docker.io/library/python:3.13-slim@sha256:1bca0202e953784ac2a1daf36ebbc9cbebed48afcfba12d1225aaab3793eca33                                                                                                                                                          0.0s<br>
-=&gt; [internal] load build context                                                                                                                                                                                                                                                  0.0s<br>
-=&gt; =&gt; transferring context: 310B                                                                                                                                                                                                                                                  0.0s<br>
-=&gt; CACHED [2/4] WORKDIR /app                                                                                                                                                                                                                                                      0.0s<br>
-=&gt; [3/4] COPY . .                                                                                                                                                                                                                                                                 0.1s<br>
-=&gt; [4/4] RUN pip install -r requirements.txt                                                                                                                                                                                                                                     63.6s<br>
-=&gt; exporting to image                                                                                                                                                                                                                                                             1.6s<br>
-=&gt; =&gt; exporting layers                                                                                                                                                                                                                                                            0.9s<br>
-=&gt; =&gt; exporting manifest sha256:fb2f23e7feeb23365ee8cc3cd9a5a8c5d497c73538c16463e23195a6b873d7bf                                                                                                                                                                                  0.0s<br>
-=&gt; =&gt; exporting config sha256:41ffab42f6b9d9c336023838318f252e00e15a9d5a73cc17a765dae05fdc5435                                                                                                                                                                                    0.0s<br>
-=&gt; =&gt; exporting attestation manifest sha256:83d850f342fee281553b7b387484f4790d4553015fb12d4cec7ac00462229a25                                                                                                                                                                      0.0s<br>
-=&gt; =&gt; exporting manifest list sha256:1bfb1d56ae1e7a710f2f6277d9c2a6b2b746e6710a83b1792bea01ef7bbec520                                                                                                                                                                             0.0s<br>
-=&gt; =&gt; naming to docker.io/library/docker_test:latest                                                                                                                                                                                                                              0.0s<br>
-=&gt; =&gt; unpacking to docker.io/library/docker_test:latest<br>
-创建容器并运行</p>
-<p>PS E:\docker\demo&gt; docker run -d -p 8000:8000 docker_test<br>
-22fd617066ad0f95b1a664257f4c00a6dc1b60d9de7c894f8940f24b34859629<br>
-PS E:\docker\demo&gt; docker ps -a<br>
-CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS                     PORTS                                         NAMES<br>
-22fd617066ad   docker_test   "python3 main.py"        4 seconds ago   Up 4 seconds               0.0.0.0:8000-&gt;8000/tcp, [::]:8000-&gt;8000/tcp   sharp_banach<br>
-PS E:\docker\demo&gt; curl <a href="http://127.0.0.1:8000" rel="nofollow">http://127.0.0.1:8000</a></p>
-<p>StatusCode        : 200<br>
-StatusDescription : OK<br>
-Content           : {"hello":"dbkuaizi"}<br>
-RawContent        : HTTP/1.1 200 OK<br>
-Content-Length: 20<br>
-Content-Type: application/json<br>
-Date: Tue, 09 Sep 2025 14:31:30 GMT<br>
-Server: uvicorn</p>
-<pre class="notranslate"><code class="notranslate">                {"hello":"dbkuaizi"}
-</code></pre>
-<p>Forms             : {}<br>
-Headers           : {[Content-Length, 20], [Content-Type, application/json], [Date, Tue, 09 Sep 2025 14:31:30 GMT], [Server, uvicorn]}<br>
-Images            : {}<br>
-InputFields       : {}<br>
-Links             : {}<br>
-ParsedHtml        : System.__ComObject<br>
-RawContentLength  : 20<br>
-Docker 网络<br>
-桥接模式<br>
-Docker 网络 默认 Bridge（桥接模式），所有的容器都连接到这个网络中，每一个容器都分配了一个内部的 IP 地址，一般都是 172.17 开头。在这个内部子网里面，容器可以通过内部 IP 地址互相访问。</p>
-<p>但容器网络和宿主机的网络是隔离的，可以使用 docker network create 命令创建子网，默认情况下，子网也是桥接模式的一种，然后可以指定容器加入不同的子网，同一个子网内的容器可以互相通信，而跨子网则不可以通信。</p>
-<p>使用子网还有一个好处，同一个子网内的容器，可以直接使用容器名称互相访问，而不必使用内部的 IP 地址。</p>
-<h1>创建一个 名叫 network1 的子网</h1>
-<p>docker network create network1</p>
-<h1>创建一个 nginx 容器 使用 network1 的子网</h1>
-<p>docker run -d --network network1 nginx<br>
-116224390346617.webp</p>
-<p>HOST 模式<br>
-host 模式下，docker 容器直接共享宿主机的网络，容器直接使用宿主机的 IP 地址，无需 -p 参数进行端口映射，容器内的服务直接运行在宿主机的端口上，通过宿主机的 IP 和端口就能访问到容器中服务。</p>
-<p>docker run -d --network host nginx<br>
-NONE 模式<br>
-这个模式表示不联网</p>
-<p>控制命令<br>
-创建网络</p>
-<p>docker network create network1<br>
-查看网络</p>
-<p>PS C:\Users\Administrator&gt; docker network list<br>
-NETWORK ID     NAME       DRIVER    SCOPE<br>
-d30095b3bc13   bridge     bridge    local<br>
-24b646446630   host       host      local<br>
-a26161c3eff2   network1   bridge    local<br>
-7800c9b21eb6   none       null      local<br>
-除了我们创建的模式以外，还有 Docker 自带的三种模式，需要注意的是 这三个自带的网络模式是不可删除的</p>
-<p>删除网络</p>
-<p>docker network rm network1<br>
-Docker Compose<br>
-有的时候 一个完整的应用可能会是很多部分组成的，例如前端、后端、数据库 以及各种附加的技术栈，这些东西应该如何容器化呢？</p>
-<p>我们可以自然的想到，将这些模块都打包在一起，做成一个巨大的容器。但这样做有一个弊端，只要其中一个模块发生故障，例如 服务端内存泄露，可能会导致整个容器都崩溃挂掉。</p>
-<p>并且这样做的可伸缩性差，如果想给系统做扩容，只能把整个大容器在复制一份，做不到对某个模块的精确扩容。</p>
-<p>多应用的最佳实践，是把每一个模块都打包成一个独立的容器。但这样多容器 增加了很多使用成本，因为想创建多个 容器 就要多次使用 docker run ，还需要配置容器之间的网络环境，尝试管理这些容器时，一个遗漏就会导致很多问题，并且若让其他人部署项目，如果操作者对部署流程不熟悉 也会导致各种问题的发生。</p>
-<p>这个时候，容器编排技术就很有用了，也就是 Docker Compose，它使用 yml 文件 管理多个容器，在这个文件中记录了容器之间时如何创建以及如何协同工作的，我们可以简单的把 Docker Compose 文件理解成一个或多个 Docker run 命令，按照特定的格式书写到一个文件中，</p>
-<p>Docker Compose 格式如下：</p>
-<p>254110120740349.webp</p>
-<p>右侧最顶级的就是 Services 元素，每个元素就对应一个 Services<br>
-左侧的 --name 在右侧就变成了 services 名<br>
-左侧的镜像名，在右侧写在了 image: 属性后面<br>
-左侧的 -e 参数，对应右边的 environments<br>
-左侧的 -v 对应右侧的 volume 也就是挂载卷。<br>
-左侧的 -p 对应右边的 ports<br>
-右侧的 depends_on 用来表示启动顺序关系，这里表示 my_mongodb_express 容器，依赖 my_mongodb 。这时 程序会先启动 mongodb 再启动荣亲<br>
-左右两边唯一的区别是：左边自定义了一个子网 network1 ，而右边没有。同一个 compose 文件中，定义的所有容器都会自动加入同一个子网，不用我们额外维护。</p>
-<p>我们可以借助 AI 来生成 需要的 Compose 文件，而无需手动编写。</p>
-<p>使用 Compose</p>
-<p>在启动目录下创建 docker-compose.yaml 文件，内容如下：</p>
-<p>services:<br>
-my_mongodb:<br>
-image: mongo<br>
-environment:<br>
-MONGO_INITDB_ROOT_USERNAME: name<br>
-MONGO_INITDB_ROOT_PASSWORD: pass<br>
-volumes:<br>
-- /my/datadir:/data/db</p>
-<p>my_mongodb_express:<br>
-image: mongo-express<br>
-ports:<br>
-- 8081:8081<br>
-environment:<br>
-ME_CONFIG_MONGODB_SERVER: my_mongodb<br>
-ME_CONFIG_MONGODB_ADMINUSERNAME: name<br>
-ME_CONFIG_MONGODB_ADMINPASSWORD: pass<br>
-depends_on:<br>
-- my_mongodb<br>
-创建并运行启动</p>
-<p>然后执行 docker compose up -d 运行，如果容器已经在运行了 重复执行这个命令不会有任何效果。</p>
-<p>执行该命令时，会检测当前目录下 名为 docker-compose.yaml 或 compose.yaml 文件。可以通过 docker compose -f tesst.yaml up -d 指定 compose 文件。</p>
-<p>PS E:\dbkuaizi\mongodb&gt; docker compose up -d<br>
-[+] Running 3/3<br>
-✔ Network mongodb_default                 Created                                                                 0.0s<br>
-✔ Container mongodb-my_mongodb-1          Started                                                                 0.6s<br>
-✔ Container mongodb-my_mongodb_express-1  Started                                                                 0.7s<br>
-PS E:\dbkuaizi\mongodb&gt;<br>
-停止并删除</p>
-<p>docker compose down 命令会停止并删除容器</p>
-<p>PS E:\docker\mongodb&gt; docker compose down<br>
-time="2025-09-18T21:47:55+08:00" level=warning msg="E:\docker\mongodb\docker-compose.yml: the attribute <code class="notranslate">version</code> is obsolete, it will be ignored, please remove it to avoid potential confusion"<br>
-[+] Running 3/3<br>
-✔ Container mongodb-my_mongodb_express-1  Removed                                                                 0.3s<br>
-✔ Container mongodb-my_mongodb-1          Removed                                                                 0.3s<br>
-✔ Network mongodb_default                 Removed                                                                 0.4s<br>
-停止不删除</p>
-<p>docker compose stop 命令会停止并且不会删除容器</p>
-<p>启动</p>
-<p>docker compose start 命令会启动停止的容器</p>
-<h2>7. Docker Compose - 多容器编排</h2>
-<ul>
-<li>
-<p><strong>背景</strong>: 当一个完整的应用由多个模块（如前端、后端、数据库）组成时，若将所有模块打包成一个巨大容器，会导致故障蔓延、伸缩性差。若每个模块独立容器化，则管理多个容器（创建、网络配置）会增加复杂性。</p>
-</li>
-<li>
-<p><strong>解决方案</strong>: Docker Compose是一种轻量级的容器编排技术，用于管理多个容器的创建和协同工作。</p>
-</li>
-<li>
-<p><strong>核心</strong>: 使用YAML文件（通常命名为<code class="notranslate">docker-compose.yml</code>）定义多服务应用。</p>
-</li>
-<li>
-<p><strong>YAML文件结构</strong>: 可视为多个<code class="notranslate">docker run</code>命令按照特定格式组织在一个文件中。</p>
-</li>
-<li>
-<p><code class="notranslate">services</code>: 顶级元素，每个服务对应一个容器。</p>
-</li>
-<li>
-<p>服务名称（如<code class="notranslate">mongodb</code>）: 对应<code class="notranslate">docker run</code>中的<code class="notranslate">--name</code>，作为容器名的一部分。</p>
-</li>
-<li>
-<p><code class="notranslate">image</code>: 对应<code class="notranslate">docker run</code>中的镜像名。</p>
-</li>
-<li>
-<p><code class="notranslate">environment</code>: 对应<code class="notranslate">docker run</code>的<code class="notranslate">-e</code>参数。</p>
-</li>
-<li>
-<p><code class="notranslate">volumes</code>: 对应<code class="notranslate">docker run</code>的<code class="notranslate">-v</code>参数。</p>
-</li>
-<li>
-<p><code class="notranslate">ports</code>: 对应<code class="notranslate">docker run</code>的<code class="notranslate">-p</code>参数。</p>
-</li>
-<li>
-<p><strong>网络</strong>: Docker Compose会自动为每个Compose文件创建一个默认子网，文件中定义的所有容器都会自动加入此子网，并可通过服务名称互相访问。</p>
-</li>
-<li>
-<p><code class="notranslate">depends_on</code>: 定义容器的启动顺序，确保依赖服务先启动。</p>
-</li>
-<li>
-<p><strong>AI辅助</strong>: 可借助AI工具生成等价的Docker Compose文件。</p>
-</li>
-<li>
-<p><strong>Docker Compose命令</strong>:</p>
-</li>
-<li>
-<p><code class="notranslate">docker compose up</code>: 启动YAML文件中定义的所有服务（容器）。</p>
-</li>
-</ul>
-<pre class="notranslate"><code class="notranslate">*  `-d`: 后台运行。
+<pre class="notranslate"><code class="notranslate"># 选择一个基础镜像作为运行环境
+FROM python:3.13-slim
+# 在镜像内切换一个工作目录，后续所有的操作都是基于这个目录来的
+WORKDIR /app
+# 将项目文件拷贝到镜像的工作目录
+# 第一个 “.” 代表当前目录，第二个 “.” 代表镜像的工作目录 
+COPY . .
 
-*  会自动创建子网和容器。
+# 安装容器内环境需要的依赖
+RUN pip install -r requirements.txt
+
+# 声明对外提供服务的端口是哪个
+EXPOSE 8000
+
+# 容器内服务启动命令，每次启动时容器内会自动执行这个命令
+CMD ["python3","main.py"]
 </code></pre>
-<ul>
-<li>
-<p><code class="notranslate">docker compose down</code>: 停止并删除由Compose文件定义的所有服务和网络。</p>
-</li>
-<li>
-<p><code class="notranslate">docker compose stop</code>: 仅停止服务，不删除容器。</p>
-</li>
-<li>
-<p><code class="notranslate">docker compose start</code>: 启动已停止的服务。</p>
-</li>
-<li>
-<p><code class="notranslate">docker compose -f &lt;文件名.yml&gt; up</code>: 指定非标准文件名的Compose文件进行操作。</p>
-</li>
-<li>
-<p><strong>适用场景</strong>: Docker Compose适合个人使用和单机运行的轻量级容器编排需求。</p>
-</li>
-<li>
-<p><strong>与Kubernetes对比</strong>: Kubernetes是企业级服务器集群和大规模容器编排的解决方案，功能更为复杂。</p>
-</li>
-</ul>
-<h2>8. 总结</h2>
-<p>以上内容涵盖了Docker的核心概念、在不同操作系统上的安装方法、常用的镜像与容器管理命令、Dockerfile的编写与镜像构建流程、Docker的多种网络模式，以及轻量级多容器编排工具Docker Compose的使用。这些是理解和应用Docker的关键知识点。</p></div>
+<h3>main.py内容</h3>
+<pre class="notranslate"><code class="notranslate"># main.py
+from fastapi import FastAPI
+import uvicorn
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"hello":"dbkuaizi"}
+
+if __name__ == "__main__":
+    uvicorn.run(app,host='0.0.0.0',port=8000)
+</code></pre>
+<h3>构建镜像</h3>
+<p>Dockerfile 文件写好了，可以使用 docker build 构建镜像。</p>
+<p><code class="notranslate">PS E:\docker\demo&gt; docker build -t docker_test .</code></p>
+<pre class="notranslate"><code class="notranslate">[+] Building 65.7s (9/9) FINISHED                                                                                                                                                                                                                                  docker:desktop-linux
+ =&gt; [internal] load build definition from Dockerfile                                                                                                                                                                                                                               0.0s
+ =&gt; =&gt; transferring dockerfile: 616B                                                                                                                                                                                                                                               0.0s
+ =&gt; [internal] load metadata for docker.io/library/python:3.13-slim                                                                                                                                                                                                                0.0s
+ =&gt; [internal] load .dockerignore                                                                                                                                                                                                                                                  0.0s
+ =&gt; =&gt; transferring context: 2B                                                                                                                                                                                                                                                    0.0s
+ =&gt; [1/4] FROM docker.io/library/python:3.13-slim@sha256:1bca0202e953784ac2a1daf36ebbc9cbebed48afcfba12d1225aaab3793eca33                                                                                                                                                          0.0s
+ =&gt; =&gt; resolve docker.io/library/python:3.13-slim@sha256:1bca0202e953784ac2a1daf36ebbc9cbebed48afcfba12d1225aaab3793eca33                                                                                                                                                          0.0s
+ =&gt; [internal] load build context                                                                                                                                                                                                                                                  0.0s
+ =&gt; =&gt; transferring context: 310B                                                                                                                                                                                                                                                  0.0s
+ =&gt; CACHED [2/4] WORKDIR /app                                                                                                                                                                                                                                                      0.0s
+ =&gt; [3/4] COPY . .                                                                                                                                                                                                                                                                 0.1s
+ =&gt; [4/4] RUN pip install -r requirements.txt                                                                                                                                                                                                                                     63.6s
+ =&gt; exporting to image                                                                                                                                                                                                                                                             1.6s
+ =&gt; =&gt; exporting layers                                                                                                                                                                                                                                                            0.9s
+ =&gt; =&gt; exporting manifest sha256:fb2f23e7feeb23365ee8cc3cd9a5a8c5d497c73538c16463e23195a6b873d7bf                                                                                                                                                                                  0.0s
+ =&gt; =&gt; exporting config sha256:41ffab42f6b9d9c336023838318f252e00e15a9d5a73cc17a765dae05fdc5435                                                                                                                                                                                    0.0s
+ =&gt; =&gt; exporting attestation manifest sha256:83d850f342fee281553b7b387484f4790d4553015fb12d4cec7ac00462229a25                                                                                                                                                                      0.0s
+ =&gt; =&gt; exporting manifest list sha256:1bfb1d56ae1e7a710f2f6277d9c2a6b2b746e6710a83b1792bea01ef7bbec520                                                                                                                                                                             0.0s
+ =&gt; =&gt; naming to docker.io/library/docker_test:latest                                                                                                                                                                                                                              0.0s
+ =&gt; =&gt; unpacking to docker.io/library/docker_test:latest    
+</code></pre>
+<h3>创建容器并运行</h3>
+<pre class="notranslate"><code class="notranslate">PS E:\docker\demo&gt; docker run -d -p 8000:8000 docker_test
+22fd617066ad0f95b1a664257f4c00a6dc1b60d9de7c894f8940f24b34859629
+</code></pre>
+<pre class="notranslate"><code class="notranslate">PS E:\docker\demo&gt; docker ps -a
+CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS                     PORTS                                         NAMES
+22fd617066ad   docker_test   "python3 main.py"        4 seconds ago   Up 4 seconds               0.0.0.0:8000-&gt;8000/tcp, [::]:8000-&gt;8000/tcp   sharp_banach
+</code></pre>
+<pre class="notranslate"><code class="notranslate">PS E:\docker\demo&gt; curl http://127.0.0.1:8000
+StatusCode        : 200
+StatusDescription : OK
+Content           : {"hello":"dbkuaizi"}
+RawContent        : HTTP/1.1 200 OK
+                    Content-Length: 20
+                    Content-Type: application/json
+                    Date: Tue, 09 Sep 2025 14:31:30 GMT
+                    Server: uvicorn
+
+                    {"hello":"dbkuaizi"}
+Forms             : {}
+Headers           : {[Content-Length, 20], [Content-Type, application/json], [Date, Tue, 09 Sep 2025 14:31:30 GMT], [Server, uvicorn]}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : System.__ComObject
+RawContentLength  : 20
+</code></pre>
+<h3>Docker 网络</h3>
+<p>桥接模式<br>
+Docker网络默认Bridge（桥接模式），所有的容器都连接到这个网络中，每一个容器都分配了一个内部的IP地址，一般都是 172.17 开头。在这个内部子网里面，容器可以通过内部IP地址互相访问。但容器网络和宿主机的网络是隔离的，可以使用 docker network create 命令创建子网，默认情况下，子网也是桥接模式的一种，然后可以指定容器加入不同的子网，同一个子网内的容器可以互相通信，而跨子网则不可以通信。使用子网还有一个好处，同一个子网内的容器，可以直接使用容器名称互相访问，而不必使用内部的 IP 地址。</p>
+<h3>创建一个 名叫 network1 的子网</h3>
+<p><code class="notranslate">docker network create network1</code></p>
+<h3>创建一个nginx容器使用network1的子网</h3>
+<p><code class="notranslate">docker run -d --network network1 nginx</code></p>
+<h3>HOST 模式</h3>
+<p>host 模式下，docker容器直接共享宿主机的网络，容器直接使用宿主机的IP地址，无需 -p 参数进行端口映射，容器内的服务直接运行在宿主机的端口上，通过宿主机的 IP 和端口就能访问到容器中服务。<br>
+<code class="notranslate">docker run -d --network host nginx</code></p>
+<h3>NONE 模式</h3>
+<p>这个模式表示不联网</p>
+<h3>创建网络</h3>
+<p><code class="notranslate">docker network create network1</code></p>
+<h3>查看网络</h3>
+<p><code class="notranslate">docker network list</code></p>
+<pre class="notranslate"><code class="notranslate">NETWORK ID       NAME          DRIVER      SCOPE
+d30095b3bc13     bridge         bridge        local
+24b646446630     host             host           local
+a26161c3eff2       network1     bridge        local
+7800c9b21eb6     none            null            local
+</code></pre>
+<p>除了我们创建的模式以外，还有 Docker 自带的三种模式，需要注意的是 这三个自带的网络模式是不可删除的</p>
+<h3>删除网络</h3>
+<p><code class="notranslate">docker network rm network1</code></p>
+<h3>Docker Compose</h3>
+<p>有的时候一个完整的应用可能会是很多部分组成的，例如前端、后端、数据库 以及各种附加的技术栈，这些东西应该如何容器化呢？我们可以自然的想到，将这些模块都打包在一起，做成一个巨大的容器。但这样做有一个弊端，只要其中一个模块发生故障，例如服务端内存泄露，可能会导致整个容器都崩溃挂掉。并且这样做的可伸缩性差，如果想给系统做扩容，只能把整个大容器在复制一份，做不到对某个模块的精确扩容。多应用的最佳实践，是把每一个模块都打包成一个独立的容器。但这样多容器增加了很多使用成本，因为想创建多个容器 就要多次使用 docker run ，还需要配置容器之间的网络环境，尝试管理这些容器时，一个遗漏就会导致很多问题，并且若让其他人部署项目，如果操作者对部署流程不熟悉 也会导致各种问题的发生。这个时候，容器编排技术就很有用了，也就是 Docker Compose，它使用 yml 文件管理多个容器，在这个文件中记录了容器之间时如何创建以及如何协同工作的，我们可以简单的把 Docker Compose 文件理解成一个或多个 Docker run 命令，按照特定的格式书写到一个文件中。</p>
+<h3>Docker Compose使用方法</h3>
+<p>在启动目录下创建 docker-compose.yaml 文件，内容如下：</p>
+<pre class="notranslate"><code class="notranslate">services:
+  my_mongodb:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: name
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    volumes:
+      - /my/datadir:/data/db
+
+  my_mongodb_express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: my_mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: name
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pass
+    depends_on:
+      - my_mongodb
+</code></pre>
+<p>创建并运行启动，然后执行 docker compose up -d 运行，如果容器已经在运行了 重复执行这个命令不会有任何效果。执行该命令时，会检测当前目录下名为 docker-compose.yaml 或 compose.yaml 文件。可以通过 docker compose -f tesst.yaml up -d 指定 compose 文件。</p>
+<h3>停止并删除</h3>
+<p><code class="notranslate">docker compose down </code><br>
+命令会停止并删除容器</p>
+<h3>停止不删除</h3>
+<p><code class="notranslate">docker compose stop </code><br>
+命令会停止并且不会删除容器</p>
+<h3>启动</h3>
+<p><code class="notranslate">docker compose start </code><br>
+命令会启动停止的容器</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
