@@ -1,4 +1,8 @@
 # Docker核心概念与实战指南
+相关文章及视频链接：
+1.https://www.dbkuaizi.com/archives/465.html
+2.https://www.bilibili.com/video/BV1THKyzBER6/?spm_id_from=333.1007.top_right_bar_window_history.content.click
+3.https://docker.easydoc.net/doc/81170005/cCewZWoN/lTKfePfP
 ## 1. Docker基础概念
 ### Docker概述: 
 Docker是一种成熟高效的软件部署技术，利用容器化技术为应用程序封装独立的运行环境。每个运行环境即为一个容器，承载容器运行的计算机称为宿主机。与虚拟机最大的区别是：Docker 容器共享同一个系统内核，而每个虚拟机都包含一个完整的系统内核。所以 Docker 容器比虚拟机更轻量，启动速度更快。
