@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# Docker核心概念与实战指南
+## 1. Docker基础概念
+### Docker概述: 
+Docker是一种成熟高效的软件部署技术，利用容器化技术为应用程序封装独立的运行环境。">
+<meta property="og:title" content="Docker核心概念与实战指南">
+<meta property="og:description" content="# Docker核心概念与实战指南
+## 1. Docker基础概念
+### Docker概述: 
+Docker是一种成熟高效的软件部署技术，利用容器化技术为应用程序封装独立的运行环境。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://chenWULUQI.github.io/wjc.github.io/post/Docker-he-xin-gai-nian-yu-shi-zhan-zhi-nan.html">
+<meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
+<title>Docker核心概念与实战指南</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">Docker核心概念与实战指南</h1>
+<div class="title-right">
+    <a href="https://chenWULUQI.github.io/wjc.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/chenWULUQI/wjc.github.io/issues/7" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>Docker核心概念与实战指南</h1>
+<h2>1. Docker基础概念</h2>
+<h3>Docker概述:</h3>
+<p>Docker是一种成熟高效的软件部署技术，利用容器化技术为应用程序封装独立的运行环境。每个运行环境即为一个容器，承载容器运行的计算机称为宿主机。与虚拟机最大的区别是：Docker 容器共享同一个系统内核，而每个虚拟机都包含一个完整的系统内核。所以 Docker 容器比虚拟机更轻量，启动速度更快。</p>
+<h3>镜像 (Image):</h3>
+<p>镜像可以理解为是一个特殊的压缩包，容器就像是通过压缩包解压（创建）出来的文件，我们可以使用同一个压缩包，解压出很多份相同的文件，也可以将这个压缩包分享给他人，得到和我们一样的文件。这里所说的 “文件”，就是上面提到的容器。我们也可以通过修改容器，并生成自己特定的 Docker 镜像，并将这些镜像分享给他人，其他人可以通过镜像，创建出和我们一样的容器环境。</p>
+<h3>Docker仓库 (Registry):</h3>
+<p>Docker 仓库就是我们用来存储、分享镜像的地方。所有人都可以把自己的镜像上传到仓库里面，其他人就可以下载镜像并使用。Docker 的官方仓库是 Docker Hub (<a href="https://hub.docker.com/" rel="nofollow">https://hub.docker.com/</a>)</p>
+<h2>2.Docker核心原理</h2>
+<p>Docker 利用了 Linux 的两大原生功能Cgroups 和Namespaces 来实现容器化：Cgroups 用来限制和隔离进程的资源使用。可以为每个容器设定 CPU、内存、网络带宽等资源的使用上限，确保容器的内存消耗不会影响到宿主机。Namespaces 用于隔离进程的资源视图，使得容器只能看到自己内部的进程 ID、网络资源、文件目录，看不到宿主机的。容器本质上还是一个特殊的进程，但是当我们进入容器内部时，看起来就像是一个独立的操作系统。</p>
+<h2>3. Docker安装</h2>
+<p>Docker 是基于 Linux 的容器化技术，Windows 和 Mac 需要虚拟化一个 Linux 的子系统。所以 Docker 最好的使用方式是使用 Linux 系统的宿主机。</p>
+<h3>Linux 系统</h3>
+<p>Linux 系统可以通过包管理器安装 Docker，例如 Redhat 系可以使用 yum install docker 安装。Alpine Linux 可以通过 apk add docker 安装</p>
+<h3>Windows 安装</h3>
+<p>打开 “Windows 功能”, 勾选上 Virtual Machine Paftform（虚拟机平台）、适用于 Linux 的 Windows 子系统，并重启电脑。管理员打开命令提示符，安装 wsl2</p>
+<pre class="notranslate"><code class="notranslate">wsl --set-default-version 2
+wsl --update --web-download
+</code></pre>
+<p>去 Docker 官网 或者 <a href="https://github.com/tech-shrimp/docker_installer/releases">https://github.com/tech-shrimp/docker_installer/releases</a> 下载符合自己系统的 Docker Desktop 安装包，并进行安装，安装成功后 可以在终端尝试一下：</p>
+<pre class="notranslate"><code class="notranslate">PS C:\Users\Administrator&gt; docker --version
+Docker version 28.3.3, build 980b856
+</code></pre>
+<p>在使用的过程中 Docker Desktop 需要一直开着，否则执行命令会出现这个报错。</p>
+<pre class="notranslate"><code class="notranslate">PS C:\Users\Administrator&gt; docker ps
+error during connect: Get "http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.51/containers/json": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.
+</code></pre>
+<h3>Mac 安装</h3>
+<p>直接在 Docker 官网下载安装包 安装就行。</p>
+<h2>4. Docker镜像管理命令</h2>
+<h3>下载镜像</h3>
+<p>docker pull 命令用来从仓库下载镜像。<br>
+<code class="notranslate">docker pull docker.io/library/nginx:latest</code><br>
+一个 Docker 镜像下载地址包含 4 部分内容：<br>
+1.docker.io: registry：仓库地址 / 注册表，如果是 Docker 官方仓库，则可以省略这个地址。<br>
+2.library: 命名空间（镜像作者），为了防止不同用户上传同一个名字的镜像 发生冲突。“library" 是 docker 官方仓库的命名空间，这个空间下的所有镜像都是由 Docker 官方维护。如果是官方的命名空间则可以省略不写。<br>
+3.nginx: 镜像名。<br>
+4.latest: 标签名、版本号。写 "latest" 或者不写 表示获取最新版本的镜像。<br>
+其中镜像库（repository）用来存放一个镜像的不同版本，比如"docker.io/library/nginx" 就是一个镜像库。从 Docker 官方仓库的官方命名空间里面下载最新的 Nginx Docker 镜像的简化命令;<br>
+<code class="notranslate">docker pull nginx</code><br>
+从 docker.n8n.io 的私有仓库下载 n8nio 上传的 n8n 镜像命令：<br>
+<code class="notranslate">docker pull docker.n8n.io/n8nio/n8n</code></p>
+<h3>镜像源配置</h3>
+<p>在国内的网络环境中，如果执行 docker pull 可能会出现 下载失败的问题，可以参考这篇文档配置镜像站解决：[<a href="https://github.com/tech-shrimp/docker_installer?tab=readme-ov-file#2-pull%E9%95%9C%E5%83%8F">docker_installer?tab=readme-ov-file#2-pull 镜像</a>](<a href="https://github.com/tech-shrimp/docker_installer?tab=readme-ov-file#2-pull%E9%95%9C%E5%83%8F">https://github.com/tech-shrimp/docker_installer?tab=readme-ov-file#2-pull%E9%95%9C%E5%83%8F</a>)</p>
+<h3>查看镜像</h3>
+<p><code class="notranslate">docker images</code><br>
+使用此命令可以查看 所有 Pull 到本地的镜像。</p>
+<h3>删除镜像</h3>
+<p><code class="notranslate">docker rmi [镜像标识]</code><br>
+使用此命令可以删除 pull 到本地的镜像，镜像标识可以选择镜像的 ID（image id）或者镜像的名称</p>
+<h3>创建并运行容器</h3>
+<p><code class="notranslate">docker run [镜像标识]</code><br>
+使用 run 命令 可以通过镜像创建一个容器，并启动它。镜像标识可以是镜像ID或者镜像名称。<br>
+例如：docker run nginx 就是创建一个 Nginx 容器。docker pull 命令可以省略，直接使用 docker run 运行，如果 docker 发现本地没有这个镜像则会自动拉取。</p>
+<h3>分离模式</h3>
+<p>默认情况下docker run创建容器后会导致当前终端挂起，不能进行其他操作，可以增加 -d 参数 表示容器在后台运行，不阻塞当前窗口。<br>
+<code class="notranslate">docker run -d nginx</code></p>
+<h3>自定义容器名称</h3>
+<p><code class="notranslate">docker run -d -name kz_nginx nginx</code><br>
+容器的名称和 容器 ID 的效果是等价的，但是名字更方便记忆。</p>
+<h3>端口映射</h3>
+<p>容器的网络和宿主机的网络是隔离的，例如运行了一个 Nginx 容器，容器内的 Nginx 监听了 80 端口。这时通过宿主机的 80 端口是无法访问到 Nginx 服务的。所以需要 -p {宿主机端口}:{容器端口} 命令进行映射，例如 <code class="notranslate">-p 8080:80 </code>标识将 Nginx 容器的 80 端口映射到宿主机的 8080 端口。</p>
+<h3>目录映射（绑定挂载）</h3>
+<p>与端口映射类似的就是目录映射，将容器外和容器内的目录进行绑定，容器内对文件的修改会影响宿主机的文件夹，宿主机的修改也会影响容器内文件夹。这种目录也被称为挂载卷，他的最大作用是数据的持久化。 当容器删除时，容器内的所有数据都会被删除，但通过挂载卷映射到宿主机的文件夹将得以保留。<br>
+<code class="notranslate">docker run -d -p 8080:80 -v ./:/usr/share/nginx/html nginx</code><br>
+使用绑定挂载的时候，宿主机的文件会暂时覆盖掉容器内的目录。除了这种用法 还有一种叫 Docker 卷，可以在容器之间共享和重用。</p>
+<h3>环境变量</h3>
+<p>可以在命令行通过 -e 参数传递环境变量到容器内部，例如创建一个数据库应用，需要在创建容器时，就指定数据库的账户、密码等信息。</p>
+<pre class="notranslate"><code class="notranslate">docker run -d -p 27017:27017 \
+-e MONGO_INITDB_ROOT_USERNAME=tech \
+-e MONGO_INITDB_ROOT_PASSWORD=dbkuaizi \mongo
+</code></pre>
+<p>如果不知道容器的环境变量有哪些，可以在 Docker Hub 上搜索一下，或者去 Github 上看一下 readme 文档，都有详细的描述。</p>
+<h3>进入容器</h3>
+<p><code class="notranslate">docker run -it alpine</code><br>
+通过 -it 参数可以在创建一共容器时，同时进入容器内部的终端。</p>
+<h3>退出删除</h3>
+<p><code class="notranslate">docker run -it --rm alpine</code><br>
+--rm 表示当退出容器时，自动删除这个容器。一般和 -it 命令配合使用</p>
+<h3>容器重启策略</h3>
+<p><code class="notranslate">docker run -d --restart always nginx</code><br>
+--restart 参数用来表示 容器在停止时的重启策略，它有两个选项：always 只要容器停止了，就会立即重启。包含容器因为内部错误崩溃，或者宿主机断电等场景unless-stopped ，与 always 类似，唯一区别是：手动停止的容器不会尝试重启了</p>
+<h3>创建容器</h3>
+<p><code class="notranslate">docker create nginx</code><br>
+与 run 命令功能类似，区别在于只创建容器，不自动启动。</p>
+<h3>查看容器列表</h3>
+<p><code class="notranslate">docker ps</code><br>
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS     NAMES<br>
+48fe482ecff2   nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   80/tcp    cool_hodgkin<br>
+ps 是 Process Status (进程状态) 的缩写，也是 Linux 上的一个经典命令，用于查看进程的状态信息。这一命令也被继承到 Docker 里面了<br>
+这些列含义如下：<br>
+CONTAINER ID 容器 ID，每个容器在创建时会生成一个唯一的 ID<br>
+IMAGE 基于那个镜像创建出来的<br>
+CREATED 镜像创建时间<br>
+STATUS 镜像当前状态<br>
+PORTS 镜像使用端口<br>
+NAMES 容器的名字，如果创建容器时没有指定名字，系统就会随机分配一个。<br>
+增加 -a 参数可以看到所有的容器，包括正在运行的和已经停止的。</p>
+<h3>启停容器</h3>
+<p>每次使用 docker run 运行都会创建一个新的容器，如果我们需要对同一个容器进行持续的操作，可以通过容器的启停命令来控制。</p>
+<h3>启动容器</h3>
+<p><code class="notranslate">docker start {容器标识}</code></p>
+<h3>停止容器</h3>
+<p><code class="notranslate">docker stop {容器标识}</code><br>
+使用 start 启停容器的时候，不需要再传递创建容器时的 端口映射、挂载卷、环境变量等参数都不需要重新写了，docker 已经自动保存了，重新启动可以按照原因运行。</p>
+<h3>删除容器</h3>
+<p><code class="notranslate">docker rm {容器标识}</code><br>
+使用 rm 命令可以删除容器，如果要删除运行中的容器 需要加 -f 参数强制删除。</p>
+<h3>进入容器内部</h3>
+<p><code class="notranslate">docker exec -it {容器标识} bash</code><br>
+使用 exec -it 命令 可以进入容器，在容器内部执行 shell 命令<br>
+<code class="notranslate">docker exec {容器标识} {shell 命令}</code><br>
+也可以通过这种方式 在容器外部执行容器内部的命令</p>
+<h3>查看容器 alpine 中的进程信息</h3>
+<p><code class="notranslate">docker exec alpine ps -ef</code><br>
+注意 docker 镜像为了尽可能缩小镜像体积，内部一般是一个极简的操作系统，很多系统工具、基础命令都是缺失的</p>
+<h3>查看创建信息</h3>
+<p><code class="notranslate">docker inspect {容器标识}</code><br>
+使用这个命令可以看到容器的所有信息，输出的是一个 JSON 格式，可以直接丢给 ai 帮忙解析</p>
+<h3>容器日志</h3>
+<p><code class="notranslate">docker logs {容器标识}</code><br>
+这个命令可以看容器的日志，加上 -f 命令，可以持续输出，滚动查看。</p>
+<h3>Docker 卷</h3>
+<p>docker volume 命令用于管理 Docker 卷（volume）。卷是用于持久化数据的文件系统，可以将数据和应用程序分离，便于管理，可以在容器之间共享和重用。同时卷可以用于数据的备份和恢复。</p>
+<h3>创建卷</h3>
+<p><code class="notranslate">docker volume create {卷名称}</code></p>
+<h3>查看卷信息</h3>
+<p><code class="notranslate">docker volume inspect nginx_html</code></p>
+<pre class="notranslate"><code class="notranslate">[
+    {
+        "CreatedAt": "2025-09-07T14:58:39Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/nginx_html/_data",
+        "Name": "nginx_html",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+</code></pre>
+<h3>查看所有卷</h3>
+<p><code class="notranslate">docker volume list</code></p>
+<p>DRIVER    VOLUME NAME<br>
+local         nginx_html</p>
+<h3>删除卷</h3>
+<p><code class="notranslate">docker volume rm nginx_html</code></p>
+<h3>删除未使用的卷</h3>
+<p><code class="notranslate">docker volume prune</code></p>
+<h3>Dockerfile</h3>
+<p>Dockerfile 是一个用来 构建镜像文件的文本文件，Dockerfile 文件内包含了构建镜像所需的各种信息。<br>
+在项目目录下创建一个名为 Dockerfile 的文件，并在文件中编写镜像构成的信息。</p>
+<h1>选择一个基础镜像作为运行环境</h1>
+<p>FROM python:3.13-slim</p>
+<h1>在镜像内切换一个工作目录，后续所有的操作都是基于这个目录来的</h1>
+<p>WORKDIR /app</p>
+<h1>将项目文件拷贝到镜像的工作目录</h1>
+<h1>第一个 “.” 代表当前目录，第二个 “.” 代表镜像的工作目录</h1>
+<p>COPY . .</p>
+<h1>安装容器内环境需要的依赖</h1>
+<p>RUN pip install -r requirements.txt</p>
+<h1>声明对外提供服务的端口是哪个</h1>
+<p>EXPOSE 8000</p>
+<h1>容器内服务启动命令，每次启动时容器内会自动执行这个命令</h1>
+<p>CMD ["python3","main.py"]<br>
+项目内容<br>
+main.py</p>
+<p>from fastapi import FastAPI<br>
+import uvicorn<br>
+app = FastAPI()</p>
+<p>@app.get("/")<br>
+def read_root():<br>
+return {"hello":"dbkuaizi"}</p>
+<p>if <strong>name</strong> == "<strong>main</strong>":<br>
+uvicorn.run(app,host='0.0.0.0',port=8000)<br>
+requirements.txt</p>
+<p>fastapi<br>
+uvicorn<br>
+构建镜像</p>
+<p>Dockerfile 文件写好了，可以使用 docker build 构建镜像。</p>
+<p>PS E:\docker\demo&gt; docker build -t docker_test .<br>
+[+] Building 65.7s (9/9) FINISHED                                                                                                                                                                                                                                  docker:desktop-linux<br>
+=&gt; [internal] load build definition from Dockerfile                                                                                                                                                                                                                               0.0s<br>
+=&gt; =&gt; transferring dockerfile: 616B                                                                                                                                                                                                                                               0.0s<br>
+=&gt; [internal] load metadata for docker.io/library/python:3.13-slim                                                                                                                                                                                                                0.0s<br>
+=&gt; [internal] load .dockerignore                                                                                                                                                                                                                                                  0.0s<br>
+=&gt; =&gt; transferring context: 2B                                                                                                                                                                                                                                                    0.0s<br>
+=&gt; [1/4] FROM docker.io/library/python:3.13-slim@sha256:1bca0202e953784ac2a1daf36ebbc9cbebed48afcfba12d1225aaab3793eca33                                                                                                                                                          0.0s<br>
+=&gt; =&gt; resolve docker.io/library/python:3.13-slim@sha256:1bca0202e953784ac2a1daf36ebbc9cbebed48afcfba12d1225aaab3793eca33                                                                                                                                                          0.0s<br>
+=&gt; [internal] load build context                                                                                                                                                                                                                                                  0.0s<br>
+=&gt; =&gt; transferring context: 310B                                                                                                                                                                                                                                                  0.0s<br>
+=&gt; CACHED [2/4] WORKDIR /app                                                                                                                                                                                                                                                      0.0s<br>
+=&gt; [3/4] COPY . .                                                                                                                                                                                                                                                                 0.1s<br>
+=&gt; [4/4] RUN pip install -r requirements.txt                                                                                                                                                                                                                                     63.6s<br>
+=&gt; exporting to image                                                                                                                                                                                                                                                             1.6s<br>
+=&gt; =&gt; exporting layers                                                                                                                                                                                                                                                            0.9s<br>
+=&gt; =&gt; exporting manifest sha256:fb2f23e7feeb23365ee8cc3cd9a5a8c5d497c73538c16463e23195a6b873d7bf                                                                                                                                                                                  0.0s<br>
+=&gt; =&gt; exporting config sha256:41ffab42f6b9d9c336023838318f252e00e15a9d5a73cc17a765dae05fdc5435                                                                                                                                                                                    0.0s<br>
+=&gt; =&gt; exporting attestation manifest sha256:83d850f342fee281553b7b387484f4790d4553015fb12d4cec7ac00462229a25                                                                                                                                                                      0.0s<br>
+=&gt; =&gt; exporting manifest list sha256:1bfb1d56ae1e7a710f2f6277d9c2a6b2b746e6710a83b1792bea01ef7bbec520                                                                                                                                                                             0.0s<br>
+=&gt; =&gt; naming to docker.io/library/docker_test:latest                                                                                                                                                                                                                              0.0s<br>
+=&gt; =&gt; unpacking to docker.io/library/docker_test:latest<br>
+创建容器并运行</p>
+<p>PS E:\docker\demo&gt; docker run -d -p 8000:8000 docker_test<br>
+22fd617066ad0f95b1a664257f4c00a6dc1b60d9de7c894f8940f24b34859629<br>
+PS E:\docker\demo&gt; docker ps -a<br>
+CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS                     PORTS                                         NAMES<br>
+22fd617066ad   docker_test   "python3 main.py"        4 seconds ago   Up 4 seconds               0.0.0.0:8000-&gt;8000/tcp, [::]:8000-&gt;8000/tcp   sharp_banach<br>
+PS E:\docker\demo&gt; curl <a href="http://127.0.0.1:8000" rel="nofollow">http://127.0.0.1:8000</a></p>
+<p>StatusCode        : 200<br>
+StatusDescription : OK<br>
+Content           : {"hello":"dbkuaizi"}<br>
+RawContent        : HTTP/1.1 200 OK<br>
+Content-Length: 20<br>
+Content-Type: application/json<br>
+Date: Tue, 09 Sep 2025 14:31:30 GMT<br>
+Server: uvicorn</p>
+<pre class="notranslate"><code class="notranslate">                {"hello":"dbkuaizi"}
+</code></pre>
+<p>Forms             : {}<br>
+Headers           : {[Content-Length, 20], [Content-Type, application/json], [Date, Tue, 09 Sep 2025 14:31:30 GMT], [Server, uvicorn]}<br>
+Images            : {}<br>
+InputFields       : {}<br>
+Links             : {}<br>
+ParsedHtml        : System.__ComObject<br>
+RawContentLength  : 20<br>
+Docker 网络<br>
+桥接模式<br>
+Docker 网络 默认 Bridge（桥接模式），所有的容器都连接到这个网络中，每一个容器都分配了一个内部的 IP 地址，一般都是 172.17 开头。在这个内部子网里面，容器可以通过内部 IP 地址互相访问。</p>
+<p>但容器网络和宿主机的网络是隔离的，可以使用 docker network create 命令创建子网，默认情况下，子网也是桥接模式的一种，然后可以指定容器加入不同的子网，同一个子网内的容器可以互相通信，而跨子网则不可以通信。</p>
+<p>使用子网还有一个好处，同一个子网内的容器，可以直接使用容器名称互相访问，而不必使用内部的 IP 地址。</p>
+<h1>创建一个 名叫 network1 的子网</h1>
+<p>docker network create network1</p>
+<h1>创建一个 nginx 容器 使用 network1 的子网</h1>
+<p>docker run -d --network network1 nginx<br>
+116224390346617.webp</p>
+<p>HOST 模式<br>
+host 模式下，docker 容器直接共享宿主机的网络，容器直接使用宿主机的 IP 地址，无需 -p 参数进行端口映射，容器内的服务直接运行在宿主机的端口上，通过宿主机的 IP 和端口就能访问到容器中服务。</p>
+<p>docker run -d --network host nginx<br>
+NONE 模式<br>
+这个模式表示不联网</p>
+<p>控制命令<br>
+创建网络</p>
+<p>docker network create network1<br>
+查看网络</p>
+<p>PS C:\Users\Administrator&gt; docker network list<br>
+NETWORK ID     NAME       DRIVER    SCOPE<br>
+d30095b3bc13   bridge     bridge    local<br>
+24b646446630   host       host      local<br>
+a26161c3eff2   network1   bridge    local<br>
+7800c9b21eb6   none       null      local<br>
+除了我们创建的模式以外，还有 Docker 自带的三种模式，需要注意的是 这三个自带的网络模式是不可删除的</p>
+<p>删除网络</p>
+<p>docker network rm network1<br>
+Docker Compose<br>
+有的时候 一个完整的应用可能会是很多部分组成的，例如前端、后端、数据库 以及各种附加的技术栈，这些东西应该如何容器化呢？</p>
+<p>我们可以自然的想到，将这些模块都打包在一起，做成一个巨大的容器。但这样做有一个弊端，只要其中一个模块发生故障，例如 服务端内存泄露，可能会导致整个容器都崩溃挂掉。</p>
+<p>并且这样做的可伸缩性差，如果想给系统做扩容，只能把整个大容器在复制一份，做不到对某个模块的精确扩容。</p>
+<p>多应用的最佳实践，是把每一个模块都打包成一个独立的容器。但这样多容器 增加了很多使用成本，因为想创建多个 容器 就要多次使用 docker run ，还需要配置容器之间的网络环境，尝试管理这些容器时，一个遗漏就会导致很多问题，并且若让其他人部署项目，如果操作者对部署流程不熟悉 也会导致各种问题的发生。</p>
+<p>这个时候，容器编排技术就很有用了，也就是 Docker Compose，它使用 yml 文件 管理多个容器，在这个文件中记录了容器之间时如何创建以及如何协同工作的，我们可以简单的把 Docker Compose 文件理解成一个或多个 Docker run 命令，按照特定的格式书写到一个文件中，</p>
+<p>Docker Compose 格式如下：</p>
+<p>254110120740349.webp</p>
+<p>右侧最顶级的就是 Services 元素，每个元素就对应一个 Services<br>
+左侧的 --name 在右侧就变成了 services 名<br>
+左侧的镜像名，在右侧写在了 image: 属性后面<br>
+左侧的 -e 参数，对应右边的 environments<br>
+左侧的 -v 对应右侧的 volume 也就是挂载卷。<br>
+左侧的 -p 对应右边的 ports<br>
+右侧的 depends_on 用来表示启动顺序关系，这里表示 my_mongodb_express 容器，依赖 my_mongodb 。这时 程序会先启动 mongodb 再启动荣亲<br>
+左右两边唯一的区别是：左边自定义了一个子网 network1 ，而右边没有。同一个 compose 文件中，定义的所有容器都会自动加入同一个子网，不用我们额外维护。</p>
+<p>我们可以借助 AI 来生成 需要的 Compose 文件，而无需手动编写。</p>
+<p>使用 Compose</p>
+<p>在启动目录下创建 docker-compose.yaml 文件，内容如下：</p>
+<p>services:<br>
+my_mongodb:<br>
+image: mongo<br>
+environment:<br>
+MONGO_INITDB_ROOT_USERNAME: name<br>
+MONGO_INITDB_ROOT_PASSWORD: pass<br>
+volumes:<br>
+- /my/datadir:/data/db</p>
+<p>my_mongodb_express:<br>
+image: mongo-express<br>
+ports:<br>
+- 8081:8081<br>
+environment:<br>
+ME_CONFIG_MONGODB_SERVER: my_mongodb<br>
+ME_CONFIG_MONGODB_ADMINUSERNAME: name<br>
+ME_CONFIG_MONGODB_ADMINPASSWORD: pass<br>
+depends_on:<br>
+- my_mongodb<br>
+创建并运行启动</p>
+<p>然后执行 docker compose up -d 运行，如果容器已经在运行了 重复执行这个命令不会有任何效果。</p>
+<p>执行该命令时，会检测当前目录下 名为 docker-compose.yaml 或 compose.yaml 文件。可以通过 docker compose -f tesst.yaml up -d 指定 compose 文件。</p>
+<p>PS E:\dbkuaizi\mongodb&gt; docker compose up -d<br>
+[+] Running 3/3<br>
+✔ Network mongodb_default                 Created                                                                 0.0s<br>
+✔ Container mongodb-my_mongodb-1          Started                                                                 0.6s<br>
+✔ Container mongodb-my_mongodb_express-1  Started                                                                 0.7s<br>
+PS E:\dbkuaizi\mongodb&gt;<br>
+停止并删除</p>
+<p>docker compose down 命令会停止并删除容器</p>
+<p>PS E:\docker\mongodb&gt; docker compose down<br>
+time="2025-09-18T21:47:55+08:00" level=warning msg="E:\docker\mongodb\docker-compose.yml: the attribute <code class="notranslate">version</code> is obsolete, it will be ignored, please remove it to avoid potential confusion"<br>
+[+] Running 3/3<br>
+✔ Container mongodb-my_mongodb_express-1  Removed                                                                 0.3s<br>
+✔ Container mongodb-my_mongodb-1          Removed                                                                 0.3s<br>
+✔ Network mongodb_default                 Removed                                                                 0.4s<br>
+停止不删除</p>
+<p>docker compose stop 命令会停止并且不会删除容器</p>
+<p>启动</p>
+<p>docker compose start 命令会启动停止的容器</p>
+<h2>7. Docker Compose - 多容器编排</h2>
+<ul>
+<li>
+<p><strong>背景</strong>: 当一个完整的应用由多个模块（如前端、后端、数据库）组成时，若将所有模块打包成一个巨大容器，会导致故障蔓延、伸缩性差。若每个模块独立容器化，则管理多个容器（创建、网络配置）会增加复杂性。</p>
+</li>
+<li>
+<p><strong>解决方案</strong>: Docker Compose是一种轻量级的容器编排技术，用于管理多个容器的创建和协同工作。</p>
+</li>
+<li>
+<p><strong>核心</strong>: 使用YAML文件（通常命名为<code class="notranslate">docker-compose.yml</code>）定义多服务应用。</p>
+</li>
+<li>
+<p><strong>YAML文件结构</strong>: 可视为多个<code class="notranslate">docker run</code>命令按照特定格式组织在一个文件中。</p>
+</li>
+<li>
+<p><code class="notranslate">services</code>: 顶级元素，每个服务对应一个容器。</p>
+</li>
+<li>
+<p>服务名称（如<code class="notranslate">mongodb</code>）: 对应<code class="notranslate">docker run</code>中的<code class="notranslate">--name</code>，作为容器名的一部分。</p>
+</li>
+<li>
+<p><code class="notranslate">image</code>: 对应<code class="notranslate">docker run</code>中的镜像名。</p>
+</li>
+<li>
+<p><code class="notranslate">environment</code>: 对应<code class="notranslate">docker run</code>的<code class="notranslate">-e</code>参数。</p>
+</li>
+<li>
+<p><code class="notranslate">volumes</code>: 对应<code class="notranslate">docker run</code>的<code class="notranslate">-v</code>参数。</p>
+</li>
+<li>
+<p><code class="notranslate">ports</code>: 对应<code class="notranslate">docker run</code>的<code class="notranslate">-p</code>参数。</p>
+</li>
+<li>
+<p><strong>网络</strong>: Docker Compose会自动为每个Compose文件创建一个默认子网，文件中定义的所有容器都会自动加入此子网，并可通过服务名称互相访问。</p>
+</li>
+<li>
+<p><code class="notranslate">depends_on</code>: 定义容器的启动顺序，确保依赖服务先启动。</p>
+</li>
+<li>
+<p><strong>AI辅助</strong>: 可借助AI工具生成等价的Docker Compose文件。</p>
+</li>
+<li>
+<p><strong>Docker Compose命令</strong>:</p>
+</li>
+<li>
+<p><code class="notranslate">docker compose up</code>: 启动YAML文件中定义的所有服务（容器）。</p>
+</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">*  `-d`: 后台运行。
+
+*  会自动创建子网和容器。
+</code></pre>
+<ul>
+<li>
+<p><code class="notranslate">docker compose down</code>: 停止并删除由Compose文件定义的所有服务和网络。</p>
+</li>
+<li>
+<p><code class="notranslate">docker compose stop</code>: 仅停止服务，不删除容器。</p>
+</li>
+<li>
+<p><code class="notranslate">docker compose start</code>: 启动已停止的服务。</p>
+</li>
+<li>
+<p><code class="notranslate">docker compose -f &lt;文件名.yml&gt; up</code>: 指定非标准文件名的Compose文件进行操作。</p>
+</li>
+<li>
+<p><strong>适用场景</strong>: Docker Compose适合个人使用和单机运行的轻量级容器编排需求。</p>
+</li>
+<li>
+<p><strong>与Kubernetes对比</strong>: Kubernetes是企业级服务器集群和大规模容器编排的解决方案，功能更为复杂。</p>
+</li>
+</ul>
+<h2>8. 总结</h2>
+<p>以上内容涵盖了Docker的核心概念、在不同操作系统上的安装方法、常用的镜像与容器管理命令、Dockerfile的编写与镜像构建流程、Docker的多种网络模式，以及轻量级多容器编排工具Docker Compose的使用。这些是理解和应用Docker的关键知识点。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://chenWULUQI.github.io/wjc.github.io">Blog Title</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","chenWULUQI/wjc.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
