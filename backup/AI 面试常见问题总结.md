@@ -48,7 +48,7 @@ Python 的 全局解释器锁（GIL） 会限制 CPU 多线程效率。多线程
 对大型项目来说，if __ name __ == "__ main __": 定义了程序的“入口点”，结构清晰。
 
 # 3.linux操作系统常用命令
-## 1.文件和目录操作
+详情可见这篇文档：https://www.runoob.com/linux/linux-command-manual.html
 ### pwd：显示当前文件夹路径
 ### ls：列出当前文件夹下的文件和文件夹、ls -l：列出详细信息、ls-a：显示当前文件夹下的所有子目录与文件（包括隐藏文件）
 ### cd [目录路径]：切换到该目录、cd ..：返回上级目录、cd ~：切换到当前用户的主目录
@@ -58,10 +58,16 @@ Python 的 全局解释器锁（GIL） 会限制 CPU 多线程效率。多线程
 ### cp 复制目录、cp file1.txt file2.txt：把 file1.txt 复制为 file2.txt、cp file1.txt/home/user/Documents/：将 file1.txt 复制到 /home/user/Documents/ 目录下、cp -r:递归复制整个目录、cp -i：交互模式
 ### mv 移动或重命名文件及目录、mv oldname.txt newname.txt：重命名、mv file.txt /home/user/Documents/：移动文件到目录
 ### find . -name "*.txt"：查找当前目录下的 .txt 文件、find /var/log -type d：查找 /var/log 下的目录（d为目录，f为文件）、find . -name "*.tmp" -exec rm -f {} \;：查找并删除 .tmp 文件、find . -name "*.jpg" -exec mv {} ./images/ \;：查找并移动所有 .jpg 文件到 images 文件夹（ \; 用于结束 -exec，必须写）
-
-## 2.文件查看与编辑
-### 
-
+### touch 创建空文件或更新文件的时间戳
+### cat 连接和显示文件内容，也可用来创建新文件以及合并两个文件
+### more/less 逐页显示文本文件内容
+### head/tail 显示文件的前几行或后几行
+### grep 在文件中搜索指定文本
+### ps 显示当前运行的进程
+### kill 终止进程
+### ifconfig/ip addr show 查看和配置网络接口信息
+### ping 测试与主机的连通性
+### wget/curl 从网络下载文件
 
 
 # 4.在http协议里，get请求与post请求有什么区别？
