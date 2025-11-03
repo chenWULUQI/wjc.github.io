@@ -10,9 +10,15 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="">
+<meta name="description" content="# 1.Linux中文件权限
+（1）文件类型和文件权限由 10 个字符组成：
+第 1 位表示文件的类型；
+第 2 - 4 位表示文件所有者对文件的权限；（-a）第 5 - 7 位表示文件所有者所在组的用户对文件的权限；（-g）第 8 - 10 位表示其他用户对文件的权限；（-o）其中 r 表示可读，w 表示可写，x 表示可执行，- 表示没有权限。">
 <meta property="og:title" content="AI 面试常见问题总结2">
-<meta property="og:description" content="">
+<meta property="og:description" content="# 1.Linux中文件权限
+（1）文件类型和文件权限由 10 个字符组成：
+第 1 位表示文件的类型；
+第 2 - 4 位表示文件所有者对文件的权限；（-a）第 5 - 7 位表示文件所有者所在组的用户对文件的权限；（-g）第 8 - 10 位表示其他用户对文件的权限；（-o）其中 r 表示可读，w 表示可写，x 表示可执行，- 表示没有权限。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://chenWULUQI.github.io/wjc.github.io/post/AI%20-mian-shi-chang-jian-wen-ti-zong-jie-2.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
@@ -73,7 +79,20 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"></div>
+<div class="markdown-body" id="postBody"><h1>1.Linux中文件权限</h1>
+<p>（1）文件类型和文件权限由 10 个字符组成：<br>
+第 1 位表示文件的类型；<br>
+第 2 - 4 位表示文件所有者对文件的权限；（-a）第 5 - 7 位表示文件所有者所在组的用户对文件的权限；（-g）第 8 - 10 位表示其他用户对文件的权限；（-o）其中 r 表示可读，w 表示可写，x 表示可执行，- 表示没有权限。<br>
+如果可读，权限二进制为 100，十进制是4；如果可写，权限二进制为 010，十进制是2；如果可执行，权限二进制为 001，十进制是1；所以 rw-r--r-x 权限的十进制表示为 645。即（4+2+0）（4+0+0）(4+0+1)。</p>
+<p>（2）新目录的默认最大权限为777（rwxrwxrwx）。执行'umask 0027'后，umask值027（0027等价于027）表示：用户权限无屏蔽（umask 0），组权限屏蔽写（umask 2，屏蔽w位），其他权限屏蔽所有（umask 7）。实际权限计算为：用户权限rwx（7），组权限r-x（5），其他权限---（0），因此最终权限为750（rwxr-x---）。</p>
+<p>（3）文件aaa的访问权限为rw-r--r--,现要增加所有用户的执行权限和同组用户的写权限，可以使用chmod命令,有两种方式:字母(symbolic)方式和数字(octal)方式。原始权限rw-r--r--为644，chmod a+x,g+w aaa</p>
+<ul>
+<li>a+x 表示给所有用户(all)增加执行权限</li>
+<li>g+w 表示给同组用户(group)增加写权限</li>
+<li>最终权限为rwxrwxr-x(775)可用chmod 775 aaa表示。</li>
+</ul>
+<h1>2.</h1>
+<p>每个线程都有自己独立的栈空间，而不是共享相同的栈。这是为了保证线程运行时的局部变量、函数调用等操作的独立性。但是每个线程可以共享一个堆并从中读取数据。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
