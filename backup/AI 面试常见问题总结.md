@@ -59,7 +59,7 @@ Python 的 全局解释器锁（GIL） 会限制 CPU 多线程效率。多线程
 ### mv 移动或重命名文件及目录、mv oldname.txt newname.txt：重命名、mv file.txt /home/user/Documents/：移动文件到目录
 ### find . -name "*.txt"：查找当前目录下的 .txt 文件、find /var/log -type d：查找 /var/log 下的目录（d为目录，f为文件）、find . -name "*.tmp" -exec rm -f {} \;：查找并删除 .tmp 文件、find . -name "*.jpg" -exec mv {} ./images/ \;：查找并移动所有 .jpg 文件到 images 文件夹（ \; 用于结束 -exec，必须写）
 ### touch 创建空文件或更新文件的时间戳
-### cat 连接和显示文件内容，也可用来创建新文件以及合并两个文件
+### cat 连接和显示文件内容，也可用来创建新文件以及合并两个文件,cat f1.txt>f2.txt使用输出重定向符号">"将f1.txt的内容写入到f2.txt中，管道符号"|"是用来将前一个命令的输出作为后一个命令的输入。
 ### more/less 逐页显示文本文件内容
 ### head/tail 显示文件的前几行或后几行
 ### grep 在文件中搜索指定文本
