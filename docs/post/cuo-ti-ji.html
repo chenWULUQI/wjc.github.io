@@ -97,7 +97,13 @@ D随机裁剪掉图像的70%区域<br>
 <li>ReLU/BN：不变</li>
 <li>Pool2×2,          R1=3，s1=2，stride2=2，k2=2: R2 = R1 + (k2−1)·s1 = 3+ （2-1）·2= 5；  s2= s1·stride2 = 4</li>
 <li>Conv3×3,         R2=5，s2=4，stride3=1，k3=3: R3 = R2 + (k3−1)·s2 = 5+ （3-1）·4= 13；s3= s2·stride3 = 4</li>
-</ul></div>
+</ul>
+<h1>3.在深度神经网络训练中，以下哪种方法的核心设计目标是缓解梯度消失问题？</h1>
+<p>A引入残差连接（Residual Connection）<br>
+B使用Sigmoid作为激活函数<br>
+C增加全连接层的数量<br>
+D降低初始学习率<br>
+正确答案：A。官方解析：引入残差连接（Residual Connection）的核心设计目标之一是缓解梯度消失问题，其通过捷径路径允许梯度直接传播，避免在深层网络中衰减。B选项使用Sigmoid作为激活函数容易导致梯度消失，因为它的小导数范围会加剧梯度衰减；C选项增加全连接层的数量会加深网络，可能恶化梯度消失问题；D选项降低初始学习率主要用于优化收敛速度和稳定性，而非直接针对梯度消失。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
