@@ -10,10 +10,12 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="# 1.集成学习
+<meta name="description" content="学习链接：https://www.gnn.club/
+# 1.集成学习
 在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。">
 <meta property="og:title" content="深度学习概念总结">
-<meta property="og:description" content="# 1.集成学习
+<meta property="og:description" content="学习链接：https://www.gnn.club/
+# 1.集成学习
 在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://chenWULUQI.github.io/wjc.github.io/post/shen-du-xue-xi-gai-nian-zong-jie.html">
@@ -85,7 +87,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h1>1.集成学习</h1>
+<div class="markdown-body" id="postBody"><p>学习链接：<a href="https://www.gnn.club/" rel="nofollow">https://www.gnn.club/</a></p>
+<h1>1.集成学习</h1>
 <p>在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。集成学习的核心思想是"三个臭皮匠，顶个诸葛亮"，即通过多个弱学习器的组合，可以构建一个强学习器。集成学习的主要目标是通过组合多个模型来提高预测的准确性和鲁棒性。</p>
 <h2>常见的集成学习方法包括：</h2>
 <h3>一.Bagging:</h3>
@@ -237,7 +240,15 @@ LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度�
 选择 K 个最近邻：根据计算出的距离，选择距离最近的 K 个样本。<br>
 投票或平均：对于分类问题，K 个最近邻中出现次数最多的类别即为待分类样本的类别；对于回归问题，K 个最近邻的值的平均值即为待分类样本的值。</p>
 <h2>四，K-means 聚类（K-means Clustering）</h2>
-<p>K-means 是一种基于中心点的聚类算法，通过不断调整簇的中心点，使每个簇中的数据点尽可能靠近簇中心。</p></div>
+<p>K-means 是一种基于中心点的聚类算法，通过不断调整簇的中心点，使每个簇中的数据点尽可能靠近簇中心。</p>
+<h1>6.全卷积网络</h1>
+<p>FCN将传统CNN后面的全连接层换成了卷积层，这样网络的输出将是热力图而非类别；同时，为解决卷积和池化导致图像尺寸的变小，使用上采样方式对图像尺寸进行恢复。</p>
+<h2>网络结构：</h2>
+<p>FCN网络结构主要分为两个部分：全卷积部分和反卷积部分。其中全卷积部分为一些经典的CNN网络（如VGG，ResNet等），用于提取特征；反卷积部分则是通过上采样得到原尺寸的语义分割图像。FCN的输入可以为任意尺寸的彩色图像，输出与输入尺寸相同，通道数为n（目标类别数）+1（背景）。FCN网络结构如下：<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/04bc3120-388d-48d5-bd91-106a5e2eb334"><img width="1026" height="412" alt="Image" src="https://github.com/user-attachments/assets/04bc3120-388d-48d5-bd91-106a5e2eb334" style="max-width: 100%; height: auto; max-height: 412px;"></a></p>
+<h2>上采样 Upsampling</h2>
+<p>在卷积过程的卷积操作和池化操作会使得特征图的尺寸变小，为得到原图像大小的稠密像素预测，需要对得到的特征图进行上采样操作。可通过双线性插值（Bilinear）实现上采样，且双线性插值易于通过固定卷积核的转置卷积（transposed convolution）实现，转置卷积即为反卷积（deconvolution）。在论文中，作者并没有固定卷积核，而是让卷积核变成可学习的参数。转置卷积操作过程如下：<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/81895020-e93e-496f-8a61-e2ff2238d743"><img width="480" height="224" alt="Image" src="https://github.com/user-attachments/assets/81895020-e93e-496f-8a61-e2ff2238d743" style="max-width: 100%; height: auto; max-height: 224px;"></a></p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
