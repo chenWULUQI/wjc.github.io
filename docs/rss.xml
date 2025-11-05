@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Blog Title</title><link>https://chenWULUQI.github.io/wjc.github.io</link><description>Blog description</description><copyright>Blog Title</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://github.githubassets.com/favicons/favicon.svg</url><title>avatar</title><link>https://chenWULUQI.github.io/wjc.github.io</link></image><lastBuildDate>Tue, 04 Nov 2025 07:38:45 +0000</lastBuildDate><managingEditor>Blog Title</managingEditor><ttl>60</ttl><webMaster>Blog Title</webMaster><item><title>错题集</title><link>https://chenWULUQI.github.io/wjc.github.io/post/cuo-ti-ji.html</link><description># 1.在图像分类任务中，以下哪种数据增强操作最能保证样本标签的语义一致性？
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Blog Title</title><link>https://chenWULUQI.github.io/wjc.github.io</link><description>Blog description</description><copyright>Blog Title</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://github.githubassets.com/favicons/favicon.svg</url><title>avatar</title><link>https://chenWULUQI.github.io/wjc.github.io</link></image><lastBuildDate>Wed, 05 Nov 2025 07:20:55 +0000</lastBuildDate><managingEditor>Blog Title</managingEditor><ttl>60</ttl><webMaster>Blog Title</webMaster><item><title>错题集</title><link>https://chenWULUQI.github.io/wjc.github.io/post/cuo-ti-ji.html</link><description># 1.在图像分类任务中，以下哪种数据增强操作最能保证样本标签的语义一致性？
 A随机水平翻转
 B颜色通道反转（如RGB转BGR并反色）
 C随机调整亮度至原亮度的5倍
@@ -9,6 +9,7 @@ D随机裁剪掉图像的70%区域
 在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。</description><guid isPermaLink="true">https://chenWULUQI.github.io/wjc.github.io/post/shen-du-xue-xi-gai-nian-zong-jie.html</guid><pubDate>Mon, 03 Nov 2025 06:20:10 +0000</pubDate></item><item><title>Transformer架构学习总结</title><link>https://chenWULUQI.github.io/wjc.github.io/post/Transformer-jia-gou-xue-xi-zong-jie.html</link><description>Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3
 一、前馈层FFN
 代码实现：
+```
 import torch
 import torch.nn as nn
 class FeedForward (nn.modules):
@@ -23,6 +24,7 @@ class FeedForward (nn.modules):
         x=self.relu(x);
         x=self.linear2(x);
         return x
+```
 常问问题：
 1. Transformer模型中前馈层的作用是什么？
 解答： 前馈层（FFN）在Transformer模型中的作用是对每个位置的词向量进行独立的非线性变换。</description><guid isPermaLink="true">https://chenWULUQI.github.io/wjc.github.io/post/Transformer-jia-gou-xue-xi-zong-jie.html</guid><pubDate>Tue, 28 Oct 2025 08:22:50 +0000</pubDate></item><item><title>常用命令及网址备忘</title><link>https://chenWULUQI.github.io/wjc.github.io/post/chang-yong-ming-ling-ji-wang-zhi-bei-wang.html</link><description>1.pytorc各种版本轮子文件下载：https://download.pytorch.org/whl/torch/
