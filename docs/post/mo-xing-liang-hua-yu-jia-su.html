@@ -10,9 +10,11 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="1.模型量化是将浮点数值转化为定点数值，同时尽可能减少计算精度损失的方法。">
+<meta name="description" content="# 一，模型量化
+1.模型量化是将浮点数值转化为定点数值，同时尽可能减少计算精度损失的方法。">
 <meta property="og:title" content="模型量化与加速">
-<meta property="og:description" content="1.模型量化是将浮点数值转化为定点数值，同时尽可能减少计算精度损失的方法。">
+<meta property="og:description" content="# 一，模型量化
+1.模型量化是将浮点数值转化为定点数值，同时尽可能减少计算精度损失的方法。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://chenWULUQI.github.io/wjc.github.io/post/mo-xing-liang-hua-yu-jia-su.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
@@ -73,7 +75,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>1.模型量化是将浮点数值转化为定点数值，同时尽可能减少计算精度损失的方法。具体而言，模型量化是一种压缩网络参数的方式，它将神经网络的参数（weight）、特征图（activation）等原本用浮点表示的量值换用定点（整型）表示，在计算过程中，再将定点数据反量化回浮点数据，得到结果。<br>
+<div class="markdown-body" id="postBody"><h1>一，模型量化</h1>
+<p>1.模型量化是将浮点数值转化为定点数值，同时尽可能减少计算精度损失的方法。具体而言，模型量化是一种压缩网络参数的方式，它将神经网络的参数（weight）、特征图（activation）等原本用浮点表示的量值换用定点（整型）表示，在计算过程中，再将定点数据反量化回浮点数据，得到结果。<br>
 fp16格式存储数据过程：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/47e889d9-280d-4a7f-aaf3-7b6bb54e9658"><img width="740" height="349" alt="Image" src="https://github.com/user-attachments/assets/47e889d9-280d-4a7f-aaf3-7b6bb54e9658" style="max-width: 100%; height: auto; max-height: 349px;"></a><br>
 共分为五步：1.转成二进制。2.确定符号位。3.计算阶码（即指数部分的偏移量）。4.计算尾数（即小数部分）5.拼接在一起表示。<br>
@@ -87,7 +90,16 @@ fp16格式存储数据过程：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/bbf95788-4d40-4931-9525-f84c6916df9e"><img width="464" height="148" alt="Image" src="https://github.com/user-attachments/assets/bbf95788-4d40-4931-9525-f84c6916df9e" style="max-width: 100%; height: auto; max-height: 148px;"></a><br>
 4.计算尾数（即小数部分）。<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7efb6f92-afd9-4191-bd62-353c33d484d4"><img width="518" height="155" alt="Image" src="https://github.com/user-attachments/assets/7efb6f92-afd9-4191-bd62-353c33d484d4" style="max-width: 100%; height: auto; max-height: 155px;"></a><br>
-5.拼接在一起表示为0 10001 1010000000</p></div>
+5.拼接在一起表示为0 10001 1010000000</p>
+<h1>二，KV Cache</h1>
+<p><a href="https://zhuanlan.zhihu.com/p/662498827" rel="nofollow">https://zhuanlan.zhihu.com/p/662498827</a><br>
+在 Transformer 模型中，KV Cache（Key-Value Cache，键值缓存） 指的是自回归推理过程中缓存的Key 和Value，以避免重复计算。它主要用于自注意力机制（Self-Attention），在解码（Decoder） 过程中缓存之前计算过的 Key（键）和 Value（值），从而加速生成。在没有KV Cache的情况下，每次生成一个新的 token 时，模型都需要重新计算所有 token 的 Query（查询）、Key（键）、Value（值），导致计算冗余。而使用 KV Cache 后，只需要计算新 token 的 Query，并与已缓存的 KV 进行注意力计算，大幅提高推理速度。</p>
+<h2>2.1训练时需要 KV Cache 吗？还是只有推理时需要？</h2>
+<p>训练时 不需要 KV Cache，通常不会使用它。推理时 需要 KV Cache，以加速生成，减少计算冗余。但更深入地理解 KV Cache 的作用，需要从 Transformer 训练和推理的计算模式入手。</p>
+<h3>2.1.1 训练（Training）</h3>
+<p>在 Transformer 训练阶段，所有 token 是并行计算的，因此不需要 KV Cache：输入是完整的序列，可以一次性计算所有 Q, K, V，自注意力计算 QK^T 也可以一次性完成。计算复杂度 O(N²)：对于序列长度 N，计算 QK^T 需要 O(N²)。但 GPU 可以并行计算所有 token，因此在训练阶段这个计算量是可接受的。</p>
+<h3>2.1.2 推理（Inference）</h3>
+<p>推理（文本生成）采用 自回归（Auto-Regressive） 方式：每次生成一个新的 token，只能依赖之前生成的 token 计算新的 QK^T。计算复杂度 O(N²) → O(N)：无 KV Cache：每个 token 生成时都重新计算 K, V，计算复杂度 O(N²)。有 KV Cache：只计算当前 token 的 Q，并复用之前缓存的 K, V，计算复杂度降为 O(N)。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
