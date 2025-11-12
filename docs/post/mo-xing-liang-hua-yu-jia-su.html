@@ -99,7 +99,16 @@ fp16格式存储数据过程：<br>
 <h3>2.1.1 训练（Training）</h3>
 <p>在 Transformer 训练阶段，所有 token 是并行计算的，因此不需要 KV Cache：输入是完整的序列，可以一次性计算所有 Q, K, V，自注意力计算 QK^T 也可以一次性完成。计算复杂度 O(N²)：对于序列长度 N，计算 QK^T 需要 O(N²)。但 GPU 可以并行计算所有 token，因此在训练阶段这个计算量是可接受的。</p>
 <h3>2.1.2 推理（Inference）</h3>
-<p>推理（文本生成）采用 自回归（Auto-Regressive） 方式：每次生成一个新的 token，只能依赖之前生成的 token 计算新的 QK^T。计算复杂度 O(N²) → O(N)：无 KV Cache：每个 token 生成时都重新计算 K, V，计算复杂度 O(N²)。有 KV Cache：只计算当前 token 的 Q，并复用之前缓存的 K, V，计算复杂度降为 O(N)。</p></div>
+<p>推理（文本生成）采用 自回归（Auto-Regressive） 方式：每次生成一个新的 token，只能依赖之前生成的 token 计算新的 QK^T。计算复杂度 O(N²) → O(N)：无 KV Cache：每个 token 生成时都重新计算 K, V，计算复杂度 O(N²)。有 KV Cache：只计算当前 token 的 Q，并复用之前缓存的 K, V，计算复杂度降为 O(N)。</p>
+<h1>三，TensorRT</h1>
+<p><a href="https://blog.csdn.net/qq_58158950/article/details/143061098" rel="nofollow">https://blog.csdn.net/qq_58158950/article/details/143061098</a><br>
+<a href="https://blog.csdn.net/IAMoldpan/article/details/117908232" rel="nofollow">https://blog.csdn.net/IAMoldpan/article/details/117908232</a></p>
+<h1>四，大模型推理过程概述</h1>
+<p><a href="https://zhuanlan.zhihu.com/p/25708488005" rel="nofollow">https://zhuanlan.zhihu.com/p/25708488005</a><br>
+输入是“What color is the sky”，注意在大模型推理中输入也称为prompt<br>
+输出是“The sky is blue.“，在大模型推理中输出也称为completion<br>
+使用基于Transformer的大模型，从prompt生成completion的过程分为如下五个步骤：<br>
+第1步，将大模型的模型权重加载到GPU的显存中；第2步，在CPU上对prompt做tokenization（分词），并将token的张量表示（token_ids）从内存传输到GPU的显存中；第3步，让token_ids走一遍网络得到输出的第一个token，这一步只需要走一遍网络，也被称为prefill（预填充）阶段；第4步，将生成的token拼接到输入的token的结尾，并以此作为一个新的输入来生成下一个token。重复上述过程，直到生成一个终止符的token或者达到配置的最大生成长度。终止符token也被称为end-of-sequence (EOS) token，这一步需要反复走很多遍网络，也被称为decoding（解码）阶段，给到decoder的输入随着token的增加将会不断变长；第5步，将生成的所有token从GPU的显存传输回CPU，然后由CPU将生成的id映射回文本，这就是最终生成的completion。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
