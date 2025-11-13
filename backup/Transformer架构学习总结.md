@@ -1,7 +1,9 @@
 Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3
-https://zhuanlan.zhihu.com/p/448852278
-https://zhuanlan.zhihu.com/p/1970541158544441590
-https://www.bilibili.com/video/BV1xLVKzCEsX?spm_id_from=333.788.videopod.sections&vd_source=848a0ea7f74d91e1d89121dd533ab468
+
+huggingface 中的Transformer模型使用介绍：https://zhuanlan.zhihu.com/p/448852278
+Transformer各模块介绍：https://zhuanlan.zhihu.com/p/1970541158544441590
+视频理解：https://www.bilibili.com/video/BV1xLVKzCEsX?
+spm_id_from=333.788.videopod.sections&vd_source=848a0ea7f74d91e1d89121dd533ab468
 # Transformer网络结构
 ## 总体架构
 <img width="1440" height="954" alt="Image" src="https://github.com/user-attachments/assets/99ac6384-0c25-45a7-b3a3-9bdc83aabea6" />
