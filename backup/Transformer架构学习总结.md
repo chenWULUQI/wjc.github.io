@@ -1,4 +1,7 @@
 Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3
+https://zhuanlan.zhihu.com/p/448852278
+https://zhuanlan.zhihu.com/p/1970541158544441590
+
 一、前馈层FFN
 代码实现：
 ```
