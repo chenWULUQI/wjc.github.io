@@ -1,9 +1,11 @@
 Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3
 https://zhuanlan.zhihu.com/p/448852278
 https://zhuanlan.zhihu.com/p/1970541158544441590
+https://www.bilibili.com/video/BV1xLVKzCEsX?spm_id_from=333.788.videopod.sections&vd_source=848a0ea7f74d91e1d89121dd533ab468
 # Transformer网络结构
 ## 总体架构
 <img width="1440" height="954" alt="Image" src="https://github.com/user-attachments/assets/99ac6384-0c25-45a7-b3a3-9bdc83aabea6" />
+
 ## 1.Input/Output Embedding（词嵌入向量）
 ### 作用：
 将输入文本中的每个单词（或子词）转换成一个数值向量，是连接人类语言（离散符号）与神经网络（连续计算）之间的桥梁。
