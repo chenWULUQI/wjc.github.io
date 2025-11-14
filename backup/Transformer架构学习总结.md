@@ -1,6 +1,7 @@
 Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3
 
 huggingface 中的Transformer模型使用介绍：https://zhuanlan.zhihu.com/p/448852278
+视频介绍：https://www.bilibili.com/video/BV1nhySBHEEF/?p=3&spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=848a0ea7f74d91e1d89121dd533ab468
 Transformer各模块介绍：https://zhuanlan.zhihu.com/p/1970541158544441590
 视频理解：https://www.bilibili.com/video/BV1xLVKzCEsX?
 spm_id_from=333.788.videopod.sections&vd_source=848a0ea7f74d91e1d89121dd533ab468
