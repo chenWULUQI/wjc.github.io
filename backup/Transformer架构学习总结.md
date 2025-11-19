@@ -1,4 +1,10 @@
-Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3
+Transformer到vision Transformer到Swin Transformer到clip到bert到gpt1,2，3，3.5，
+自注意力公式中的分母为什么是dk的二分之一次方。
+Transformer中多头自注意力机制灵感来自于卷积神经网络中的多个卷积核。
+主流大语言模型都是使用旋转位置编码ROPE怎么做的与基础的位置编码区别。
+chatgpt大概是怎么训练出来的，包括SWT，RLHF等概念。
+优化器AdamW与Adam。
+ppo，dpo，grpo等算法。
 
 huggingface 中的Transformer模型使用介绍：https://zhuanlan.zhihu.com/p/448852278
 视频介绍：https://www.bilibili.com/video/BV1nhySBHEEF/?p=3&spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=848a0ea7f74d91e1d89121dd533ab468

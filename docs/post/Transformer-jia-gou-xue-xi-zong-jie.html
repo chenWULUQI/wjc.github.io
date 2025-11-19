@@ -10,35 +10,11 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3
-
-huggingface 中的Transformer模型使用介绍：https://zhuanlan.zhihu.com/p/448852278
-视频介绍：https://www.bilibili.com/video/BV1nhySBHEEF/?p=3&spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=848a0ea7f74d91e1d89121dd533ab468
-Transformer各模块介绍：https://zhuanlan.zhihu.com/p/1970541158544441590
-视频理解：https://www.bilibili.com/video/BV1xLVKzCEsX?
-spm_id_from=333.788.videopod.sections&vd_source=848a0ea7f74d91e1d89121dd533ab468
-# Transformer网络结构
-## 总体架构
-<img width='1440' height='954' alt='Image' src='https://github.com/user-attachments/assets/99ac6384-0c25-45a7-b3a3-9bdc83aabea6' />
-
-## 1.Input/Output Embedding（词嵌入向量）
-### 作用：
-将输入文本中的每个单词（或子词）转换成一个数值向量，是连接人类语言（离散符号）与神经网络（连续计算）之间的桥梁。">
+<meta name="description" content="Transformer到vision Transformer到Swin Transformer到clip到bert到gpt1,2，3，3.5，
+自注意力公式中的分母为什么是dk的二分之一次方。">
 <meta property="og:title" content="Transformer架构学习总结">
-<meta property="og:description" content="Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3
-
-huggingface 中的Transformer模型使用介绍：https://zhuanlan.zhihu.com/p/448852278
-视频介绍：https://www.bilibili.com/video/BV1nhySBHEEF/?p=3&spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=848a0ea7f74d91e1d89121dd533ab468
-Transformer各模块介绍：https://zhuanlan.zhihu.com/p/1970541158544441590
-视频理解：https://www.bilibili.com/video/BV1xLVKzCEsX?
-spm_id_from=333.788.videopod.sections&vd_source=848a0ea7f74d91e1d89121dd533ab468
-# Transformer网络结构
-## 总体架构
-<img width='1440' height='954' alt='Image' src='https://github.com/user-attachments/assets/99ac6384-0c25-45a7-b3a3-9bdc83aabea6' />
-
-## 1.Input/Output Embedding（词嵌入向量）
-### 作用：
-将输入文本中的每个单词（或子词）转换成一个数值向量，是连接人类语言（离散符号）与神经网络（连续计算）之间的桥梁。">
+<meta property="og:description" content="Transformer到vision Transformer到Swin Transformer到clip到bert到gpt1,2，3，3.5，
+自注意力公式中的分母为什么是dk的二分之一次方。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://chenWULUQI.github.io/wjc.github.io/post/Transformer-jia-gou-xue-xi-zong-jie.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
@@ -109,7 +85,13 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>Transformer到vision Transformer到Swin Transformer到clip到bert到gpt3</p>
+<div class="markdown-body" id="postBody"><p>Transformer到vision Transformer到Swin Transformer到clip到bert到gpt1,2，3，3.5，<br>
+自注意力公式中的分母为什么是dk的二分之一次方。<br>
+Transformer中多头自注意力机制灵感来自于卷积神经网络中的多个卷积核。<br>
+主流大语言模型都是使用旋转位置编码ROPE怎么做的与基础的位置编码区别。<br>
+chatgpt大概是怎么训练出来的，包括SWT，RLHF等概念。<br>
+优化器AdamW与Adam。<br>
+ppo，dpo，grpo等算法。</p>
 <p>huggingface 中的Transformer模型使用介绍：<a href="https://zhuanlan.zhihu.com/p/448852278" rel="nofollow">https://zhuanlan.zhihu.com/p/448852278</a><br>
 视频介绍：<a href="https://www.bilibili.com/video/BV1nhySBHEEF/?p=3&amp;spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=848a0ea7f74d91e1d89121dd533ab468" rel="nofollow">https://www.bilibili.com/video/BV1nhySBHEEF/?p=3&amp;spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=848a0ea7f74d91e1d89121dd533ab468</a><br>
 Transformer各模块介绍：<a href="https://zhuanlan.zhihu.com/p/1970541158544441590" rel="nofollow">https://zhuanlan.zhihu.com/p/1970541158544441590</a><br>
