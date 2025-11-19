@@ -11,17 +11,17 @@
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="学习链接：https://www.gnn.club/
-# 1.集成学习
+# 一.集成学习
 在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。">
 <meta property="og:title" content="深度学习概念总结">
 <meta property="og:description" content="学习链接：https://www.gnn.club/
-# 1.集成学习
+# 一.集成学习
 在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://chenWULUQI.github.io/wjc.github.io/post/shen-du-xue-xi-gai-nian-zong-jie.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
 <title>深度学习概念总结</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -88,10 +88,10 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><p>学习链接：<a href="https://www.gnn.club/" rel="nofollow">https://www.gnn.club/</a></p>
-<h1>1.集成学习</h1>
-<p>在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。集成学习的核心思想是"三个臭皮匠，顶个诸葛亮"，即通过多个弱学习器的组合，可以构建一个强学习器。集成学习的主要目标是通过组合多个模型来提高预测的准确性和鲁棒性。</p>
-<h2>常见的集成学习方法包括：</h2>
-<h3>一.Bagging:</h3>
+<h1>一.集成学习</h1>
+<p>在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。集成学习的核心思想是"三个臭皮匠，顶个诸葛亮"，即通过多个弱学习器的组合，可以构建一个强学习器。集成学习的主要目标是通过组合多个模型来提高预测的准确性和鲁棒性。<br>
+常见的集成学习方法包括：</p>
+<h2>1.Bagging:</h2>
 <p>通过自助采样从原始数据集抽取多个训练集,分别训练基学习器,最后通过投票或平均等方式集成。</p>
 <h3>实现步骤：</h3>
 <p>数据集重采样：对训练数据集进行多次有放回的随机采样（bootstrap），每次采样得到一个子数据集。<br>
@@ -105,7 +105,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <h3>缺点：</h3>
 <p>训练过程时间较长，因为需要训练多个模型。<br>
 结果难以解释，因为没有单一的模型。</p>
-<h3>二. Boosting:</h3>
+<h2>2. Boosting:</h2>
 <p>目标是通过减少模型的偏差来提高性能，适用于弱学习器。Boosting 的核心思想是逐步调整每个模型的权重，强调那些被前一轮模型错误分类的样本。</p>
 <h3>实现步骤：</h3>
 <p>序列化训练：模型是一个接一个地训练的，每一轮训练都会根据前一轮的错误进行调整。<br>
@@ -122,31 +122,30 @@ LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度�
 <h3>缺点：</h3>
 <p>对噪声数据比较敏感，容易导致过拟合。<br>
 训练过程较慢，特别是在数据量较大的情况下。</p>
-<h1>2.正则化</h1>
+<h1>二.正则化</h1>
 <p>机器学习常常会遇到“过拟合”的问题。也就是说，模型在训练数据上表现得非常好，但在测试数据上却一塌糊涂。为了防止模型“记住”数据而不是“学习”规律，我们通常会在训练时加入一种约束，让模型不要太复杂——这就是正则化（Regularization）</p>
-<h2>L1 正则化</h2>
+<h2>1.L1 正则化</h2>
 <p>其惩罚项是参数的绝对值之和：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/88a0e7ce-16d8-47eb-85a7-89586737a0b7"><img width="399" height="104" alt="Image" src="https://github.com/user-attachments/assets/88a0e7ce-16d8-47eb-85a7-89586737a0b7" style="max-width: 100%; height: auto; max-height: 104px;"></a><br>
 参数 wi​ 越大，惩罚越强。L1 的一个特别之处在于：它会让某些参数直接变成 0。也就是说，它不仅能让模型更简单，还能起到特征选择的作用——把不重要的特征直接“删除”掉。</p>
-<h2>L2 正则化</h2>
+<h2>2.L2 正则化</h2>
 <p>其惩罚项是参数平方和：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/95846661-2c9c-4427-8a54-784a456c0a45"><img width="414" height="111" alt="Image" src="https://github.com/user-attachments/assets/95846661-2c9c-4427-8a54-784a456c0a45" style="max-width: 100%; height: auto; max-height: 111px;"></a><br>
 这里的惩罚项让模型在训练时“更平滑”，即不让某个参数特别大，也不会让某个参数直接变成 0。因此，L2 正则化的效果是让所有权重都“更小”，但仍然保留在模型中。</p>
-<h2>Dropout（随机失活）</h2>
+<h2>3.Dropout（随机失活）</h2>
 <p>原理：在每个训练步骤中，随机将某层中一些神经元的输出设为零。<br>
 代码实现：</p>
-<pre class="notranslate"><code class="notranslate">def dropout(X, drop_prob):
-    X = X.float()
-    assert 0 &lt;= drop_prob &lt;= 1        # dropout概率为[0,1]之间
-    keep_prob = 1 - drop_prob        # keep_prob = 1-p即为保留率
-    if keep_prob == 0:                        # p = 1时表示全部丢弃，返回全0矩阵即可
-        return torch.zeros_like(X)
-    # 设置mask矩阵（1.0、0.0），用来和输入X相乘，模拟dropout过程
-    mask = (torch.rand(X.shape) &lt; keep_prob).float()
-    Y = mask * X / keep_prob
-    return Y
-</code></pre>
-<h1>3.常见的几种激活函数</h1>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">def</span> <span class="pl-en">dropout</span>(<span class="pl-c1">X</span>, <span class="pl-s1">drop_prob</span>):
+    <span class="pl-c1">X</span> <span class="pl-c1">=</span> <span class="pl-c1">X</span>.<span class="pl-c1">float</span>()
+    <span class="pl-k">assert</span> <span class="pl-c1">0</span> <span class="pl-c1">&lt;=</span> <span class="pl-s1">drop_prob</span> <span class="pl-c1">&lt;=</span> <span class="pl-c1">1</span>        <span class="pl-c"># dropout概率为[0,1]之间</span>
+    <span class="pl-s1">keep_prob</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span> <span class="pl-c1">-</span> <span class="pl-s1">drop_prob</span>        <span class="pl-c"># keep_prob = 1-p即为保留率</span>
+    <span class="pl-k">if</span> <span class="pl-s1">keep_prob</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span>:                        <span class="pl-c"># p = 1时表示全部丢弃，返回全0矩阵即可</span>
+        <span class="pl-k">return</span> <span class="pl-s1">torch</span>.<span class="pl-c1">zeros_like</span>(<span class="pl-c1">X</span>)
+    <span class="pl-c"># 设置mask矩阵（1.0、0.0），用来和输入X相乘，模拟dropout过程</span>
+    <span class="pl-s1">mask</span> <span class="pl-c1">=</span> (<span class="pl-s1">torch</span>.<span class="pl-c1">rand</span>(<span class="pl-c1">X</span>.<span class="pl-c1">shape</span>) <span class="pl-c1">&lt;</span> <span class="pl-s1">keep_prob</span>).<span class="pl-c1">float</span>()
+    <span class="pl-c1">Y</span> <span class="pl-c1">=</span> <span class="pl-s1">mask</span> <span class="pl-c1">*</span> <span class="pl-c1">X</span> <span class="pl-c1">/</span> <span class="pl-s1">keep_prob</span>
+    <span class="pl-k">return</span> <span class="pl-c1">Y</span></pre></div>
+<h1>三.常见的几种激活函数</h1>
 <h2>1.Sigmoid函数</h2>
 <p>数学表达式：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/d874218a-6a65-44cf-b6a3-26fc680ac530"><img width="160" height="68" alt="Image" src="https://github.com/user-attachments/assets/d874218a-6a65-44cf-b6a3-26fc680ac530" style="max-width: 100%; height: auto; max-height: 68px;"></a><br>
@@ -190,9 +189,9 @@ LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度�
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/387e15f3-8578-4db8-aed0-6f3f803a5033"><img width="412" height="298" alt="Image" src="https://github.com/user-attachments/assets/387e15f3-8578-4db8-aed0-6f3f803a5033" style="max-width: 100%; height: auto; max-height: 298px;"></a></p>
 <h3>用处</h3>
 <p>Softmax函数常在神经网络输出层充当激活函数，将输出层的值通过激活函数映射到0-1区间，将神经元输出构造成概率分布，用于多分类问题中，Softmax激活函数映射值越大，则真实类别可能性越大。</p>
-<h1>4.数据分类与回归</h1>
+<h1>四.数据分类与回归</h1>
 <p>在机器学习中，分类和回归是两种核心任务，分别用于处理离散和连续的目标变量。分类任务预测类别标签，而回归任务预测连续数值。以下是它们的主要特点、常用算法及应用场景。</p>
-<h2>分类任务</h2>
+<h2>1.分类任务</h2>
 <p>分类的目标是将数据分配到预定义的类别中。目标变量是离散的，例如垃圾邮件检测（是/否）或图像分类（猫/狗）。<br>
 常用算法包括：<br>
 逻辑回归：适合简单的二分类问题。<br>
@@ -200,7 +199,7 @@ LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度�
 支持向量机（SVM）：适合高维数据，尤其是线性不可分问题。<br>
 梯度提升（如XGBoost、LightGBM）：在复杂数据上表现优异。<br>
 神经网络：用于处理复杂的非线性关系。</p>
-<h2>回归任务</h2>
+<h2>2.回归任务</h2>
 <p>回归的目标是预测连续数值，例如房价预测或销售额估计。目标变量是连续的。<br>
 常用算法包括：<br>
 线性回归：适合简单线性关系。<br>
@@ -208,15 +207,15 @@ LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度�
 决策树回归与随机森林回归：处理非线性关系。<br>
 梯度提升回归（如XGBoost、LightGBM）：在复杂数据上表现优异。<br>
 神经网络：适合复杂的非线性回归任务。</p>
-<h1>5.机器学习算法</h1>
-<h2>一，线性回归 (Linear Regression)</h2>
+<h1>五.机器学习算法</h1>
+<h2>1.线性回归 (Linear Regression)</h2>
 <p>是一种用于预测连续值的最基本的机器学习算法，它假设目标变量 y 和特征变量 x 之间存在线性关系，并试图找到一条最佳拟合直线来描述这种关系。</p>
 <h3>如何求解线性回归？</h3>
-<p>1、最小二乘法<br>
+<p>1）最小二乘法<br>
 最小二乘法是一种常用的求解线性回归的方法，它通过求解以下方程来找到最佳的 ( w ) 和 ( b )。<br>
 最小二乘法的目标是最小化残差平方和（RSS），其公式为：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/10d2dd94-19b1-43e6-9953-aa3cc51ceb41"><img width="204" height="77" alt="Image" src="https://github.com/user-attachments/assets/10d2dd94-19b1-43e6-9953-aa3cc51ceb41" style="max-width: 100%; height: auto; max-height: 77px;"></a><br>
-2、梯度下降法<br>
+2）梯度下降法<br>
 梯度下降法的目标是最小化损失函数 。对于线性回归问题，通常使用均方误差（MSE）作为损失函数：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/0f114621-d287-455a-881e-615c393a5b3a"><img width="252" height="68" alt="Image" src="https://github.com/user-attachments/assets/0f114621-d287-455a-881e-615c393a5b3a" style="max-width: 100%; height: auto; max-height: 68px;"></a><br>
 梯度是损失函数对参数的偏导数，表示损失函数在参数空间中的变化方向。对于线性回归，梯度计算如下：<br>
@@ -224,7 +223,7 @@ LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度�
 梯度下降法通过以下规则更新参数 w 和 b：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e654c0bc-5b35-4b91-a607-f31c31d6b5a7"><img width="170" height="101" alt="Image" src="https://github.com/user-attachments/assets/e654c0bc-5b35-4b91-a607-f31c31d6b5a7" style="max-width: 100%; height: auto; max-height: 101px;"></a><br>
 α 是学习率（learning rate），控制每次更新的步长。</p>
-<h2>二，决策树（Decision Tree）</h2>
+<h2>2.决策树（Decision Tree）</h2>
 <p>是一种常用的机器学习算法，广泛应用于分类和回归问题。决策树通过树状结构来表示决策过程，每个内部节点代表一个特征或属性的测试，每个分支代表测试的结果，每个叶节点代表一个类别或值。</p>
 <h3>工作原理：</h3>
 <p>决策树通过递归地将数据集分割成更小的子集来构建树结构。具体步骤如下：<br>
@@ -232,18 +231,18 @@ LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度�
 分割数据集：根据选定的特征将数据集分成多个子集。<br>
 递归构建子树：对每个子集重复上述过程，直到满足停止条件（如所有样本属于同一类别、达到最大深度等）。<br>
 生成叶节点：当满足停止条件时，生成叶节点并赋予类别或值。</p>
-<h2>三，K 近邻算法（K-Nearest Neighbors，简称 KNN）</h2>
+<h2>3.K 近邻算法（K-Nearest Neighbors，简称 KNN）</h2>
 <p>是一种简单且常用的分类和回归算法。K 近邻算法属于监督学习的一种，核心思想是通过计算待分类样本与训练集中各个样本的距离，找到距离最近的 K 个样本，然后根据这 K 个样本的类别或值来预测待分类样本的类别或值。</p>
 <h3>基本原理</h3>
 <p>KNN 算法的基本原理可以概括为以下几个步骤：<br>
 计算距离：计算待分类样本与训练集中每个样本的距离。常用的距离度量方法有欧氏距离、曼哈顿距离等。<br>
 选择 K 个最近邻：根据计算出的距离，选择距离最近的 K 个样本。<br>
 投票或平均：对于分类问题，K 个最近邻中出现次数最多的类别即为待分类样本的类别；对于回归问题，K 个最近邻的值的平均值即为待分类样本的值。</p>
-<h2>四，K-means 聚类（K-means Clustering）</h2>
+<h2>4.K-means 聚类（K-means Clustering）</h2>
 <p>K-means 是一种基于中心点的聚类算法，通过不断调整簇的中心点，使每个簇中的数据点尽可能靠近簇中心。</p>
-<h2>五，支持向量机（support vector machines, SVM）</h2>
+<h2>5.支持向量机（support vector machines, SVM）</h2>
 <p>SVM学习的基本想法是求解能够正确划分训练数据集并且几何间隔最大的分离超平面。</p>
-<h1>6.全卷积网络</h1>
+<h1>六.全卷积网络</h1>
 <p>FCN将传统CNN后面的全连接层换成了卷积层，这样网络的输出将是热力图而非类别；同时，为解决卷积和池化导致图像尺寸的变小，使用上采样方式对图像尺寸进行恢复。</p>
 <h2>网络结构：</h2>
 <p>FCN网络结构主要分为两个部分：全卷积部分和反卷积部分。其中全卷积部分为一些经典的CNN网络（如VGG，ResNet等），用于提取特征；反卷积部分则是通过上采样得到原尺寸的语义分割图像。FCN的输入可以为任意尺寸的彩色图像，输出与输入尺寸相同，通道数为n（目标类别数）+1（背景）。FCN网络结构如下：<br>
@@ -251,17 +250,19 @@ LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度�
 <h2>上采样 Upsampling</h2>
 <p>在卷积过程的卷积操作和池化操作会使得特征图的尺寸变小，为得到原图像大小的稠密像素预测，需要对得到的特征图进行上采样操作。可通过双线性插值（Bilinear）实现上采样，且双线性插值易于通过固定卷积核的转置卷积（transposed convolution）实现，转置卷积即为反卷积（deconvolution）。在论文中，作者并没有固定卷积核，而是让卷积核变成可学习的参数。转置卷积操作过程如下：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/81895020-e93e-496f-8a61-e2ff2238d743"><img width="480" height="224" alt="Image" src="https://github.com/user-attachments/assets/81895020-e93e-496f-8a61-e2ff2238d743" style="max-width: 100%; height: auto; max-height: 224px;"></a></p>
-<h1>7.损失函数</h1>
-<h2>均方误差（mean squared error，MSE）</h2>
+<h1>七.损失函数</h1>
+<h2>1.均方误差（mean squared error，MSE）</h2>
 <p>均方误差如下式所示：<br>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/144ae70d-3562-4089-b8c6-648b77376e39"><img width="877" height="163" alt="Image" src="https://github.com/user-attachments/assets/144ae70d-3562-4089-b8c6-648b77376e39" style="max-width: 100%; height: auto; max-height: 163px;"></a></p>
-<h2>交叉熵（cross entropy error）</h2>
+<h2>2.交叉熵（cross entropy error）</h2>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/00b898fa-e484-49df-8a21-ffd4ab088e3e"><img width="383" height="102" alt="Image" src="https://github.com/user-attachments/assets/00b898fa-e484-49df-8a21-ffd4ab088e3e" style="max-width: 100%; height: auto; max-height: 102px;"></a></p>
 这里，log表示以e为底数的自然对数。yk是神经网络的输出，tk是正确解标签。并且，tk中只有正确解标签的索引为1，其他均为0（one-hot表示）。因此只计算对应正确解标签的输出的自然对数。
-<h1>8.卷积公式</h1>
+<h1>八.卷积公式</h1>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8d6b7cc1-2d09-460d-93fa-e504b05b2a1a"><img width="673" height="194" alt="Image" src="https://github.com/user-attachments/assets/8d6b7cc1-2d09-460d-93fa-e504b05b2a1a" style="max-width: 100%; height: auto; max-height: 194px;"></a></p>
 <p>输入大小：(28, 31)；填充：2；步幅：3；滤波器大小：(5, 5)</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/28b29e97-d789-4c91-a5c8-50387ed78dda"><img width="319" height="131" alt="Image" src="https://github.com/user-attachments/assets/28b29e97-d789-4c91-a5c8-50387ed78dda" style="max-width: 100%; height: auto; max-height: 131px;"></a></p></div>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/28b29e97-d789-4c91-a5c8-50387ed78dda"><img width="319" height="131" alt="Image" src="https://github.com/user-attachments/assets/28b29e97-d789-4c91-a5c8-50387ed78dda" style="max-width: 100%; height: auto; max-height: 131px;"></a></p>
+<h1>九.张量、张量索引、切片、张量维度变换</h1>
+<p><a href="https://blog.csdn.net/m0_48241022/article/details/132729561" rel="nofollow">https://blog.csdn.net/m0_48241022/article/details/132729561</a></p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
