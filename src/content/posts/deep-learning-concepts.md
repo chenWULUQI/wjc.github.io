@@ -1,0 +1,208 @@
+---
+title: "深度学习概念总结"
+description: "机器学习与深度学习核心概念的持续整理。"
+publishDate: "2025-11-03"
+updatedDate: "2025-11-03"
+category: "notes"
+tags: ["深度学习","机器学习","学习笔记"]
+draft: false
+featured: false
+---
+
+学习链接：https://www.gnn.club/
+# 一.集成学习
+在机器学习领域，集成学习（Ensemble Learning）是一种通过结合多个模型的预测结果来提高整体性能的技术。集成学习的核心思想是"三个臭皮匠，顶个诸葛亮"，即通过多个弱学习器的组合，可以构建一个强学习器。集成学习的主要目标是通过组合多个模型来提高预测的准确性和鲁棒性。
+常见的集成学习方法包括：
+## 1.Bagging:
+通过自助采样从原始数据集抽取多个训练集,分别训练基学习器,最后通过投票或平均等方式集成。
+### 实现步骤：
+数据集重采样：对训练数据集进行多次有放回的随机采样（bootstrap），每次采样得到一个子数据集。
+训练多个模型：在每个子数据集上训练一个基学习器（通常是相同类型的模型）。
+结果合并：将多个基学习器的结果进行合并，通常是通过投票（分类问题）或平均（回归问题）。
+### 典型算法：
+随机森林（Random Forest）：随机森林是 Bagging 的经典实现，它通过构建多个决策树，每棵树在训练时随机选择特征，从而减少过拟合的风险。
+### 优势：
+可以有效减少方差，提高模型稳定性。
+适用于高方差的模型，如决策树。
+### 缺点：
+训练过程时间较长，因为需要训练多个模型。
+结果难以解释，因为没有单一的模型。
+## 2. Boosting:
+目标是通过减少模型的偏差来提高性能，适用于弱学习器。Boosting 的核心思想是逐步调整每个模型的权重，强调那些被前一轮模型错误分类的样本。
+### 实现步骤：
+序列化训练：模型是一个接一个地训练的，每一轮训练都会根据前一轮的错误进行调整。
+加权投票：最终的预测是所有弱学习器预测的加权和，其中错误分类的样本会被赋予更高的权重。
+合并模型：每个模型的权重是根据其在训练过程中的表现来确定的。
+### 典型算法：
+AdaBoost（Adaptive Boosting）：AdaBoost 通过改变样本的权重，使得每个后续分类器更加关注前一轮错误分类的样本。
+梯度提升树（Gradient Boosting Trees, GBT）：GBT 通过迭代优化目标函数，逐步减少偏差。
+XGBoost（Extreme Gradient Boosting）：XGBoost 是一种高效的梯度提升算法，广泛应用于数据科学竞赛中，具有较强的性能和优化。
+LightGBM（Light Gradient Boosting Machine）：LightGBM 是一种基于梯度提升树的框架，相较于 XGBoost，具有更快的训练速度和更低的内存使用。
+### 优势：
+适用于偏差较大的模型，能有效提高预测准确性。
+强大的性能，在许多实际应用中表现优异。
+### 缺点：
+对噪声数据比较敏感，容易导致过拟合。
+训练过程较慢，特别是在数据量较大的情况下。
+
+# 二.正则化
+机器学习常常会遇到“过拟合”的问题。也就是说，模型在训练数据上表现得非常好，但在测试数据上却一塌糊涂。为了防止模型“记住”数据而不是“学习”规律，我们通常会在训练时加入一种约束，让模型不要太复杂——这就是正则化（Regularization）
+ ## 1.L1 正则化
+其惩罚项是参数的绝对值之和：
+<img width="399" height="104" alt="Image" src="https://github.com/user-attachments/assets/88a0e7ce-16d8-47eb-85a7-89586737a0b7" />
+参数 wi​ 越大，惩罚越强。L1 的一个特别之处在于：它会让某些参数直接变成 0。也就是说，它不仅能让模型更简单，还能起到特征选择的作用——把不重要的特征直接“删除”掉。
+## 2.L2 正则化
+其惩罚项是参数平方和：
+<img width="414" height="111" alt="Image" src="https://github.com/user-attachments/assets/95846661-2c9c-4427-8a54-784a456c0a45" />
+ 这里的惩罚项让模型在训练时“更平滑”，即不让某个参数特别大，也不会让某个参数直接变成 0。因此，L2 正则化的效果是让所有权重都“更小”，但仍然保留在模型中。
+## 3.Dropout（随机失活）
+原理：在每个训练步骤中，随机将某层中一些神经元的输出设为零。
+代码实现：
+``` python
+def dropout(X, drop_prob):
+    X = X.float()
+    assert 0 <= drop_prob <= 1        # dropout概率为[0,1]之间
+    keep_prob = 1 - drop_prob        # keep_prob = 1-p即为保留率
+    if keep_prob == 0:                        # p = 1时表示全部丢弃，返回全0矩阵即可
+        return torch.zeros_like(X)
+    # 设置mask矩阵（1.0、0.0），用来和输入X相乘，模拟dropout过程
+    mask = (torch.rand(X.shape) < keep_prob).float()
+    Y = mask * X / keep_prob
+    return Y
+```
+# 三.常见的几种激活函数
+## 1.Sigmoid函数
+数学表达式：
+<img width="160" height="68" alt="Image" src="https://github.com/user-attachments/assets/d874218a-6a65-44cf-b6a3-26fc680ac530" />
+导数表达式为：
+<img width="154" height="32" alt="Image" src="https://github.com/user-attachments/assets/ec36fbf8-df6f-44e3-afea-9e315101d12d" />
+图像：
+<img width="566" height="422" alt="Image" src="https://github.com/user-attachments/assets/07447ca6-91bb-420a-b247-3893c5f5541f" />
+### 用处
+Sigmoid 函数的输出范围是 0 到 1。非常适合作为模型的输出函数用于输出一个0~1范围内的概率值，比如用于表示二分类的类别或者用于表示置信度。且其梯度平滑，便于求导，也防止模型训练过程中出现突变的梯度。
+### 缺点
+容易造成梯度消失。我们从导函数图像中了解到sigmoid的导数都是小于0.25的，那么在进行反向传播的时候，梯度相乘结果会慢慢的趋向于0。这样几乎就没有梯度信号通过神经元传递到前面层的梯度更新中，因此这时前面层的权值几乎没有更新，这就叫梯度消失。除此之外，为了防止饱和，必须对于权重矩阵的初始化特别留意。如果初始化权重过大，可能很多神经元得到一个比较小的梯度，致使神经元不能很好的更新权重提前饱和，神经网络就几乎不学习。
+
+## 2.Tanh函数
+数学表达式：
+<img width="155" height="67" alt="Image" src="https://github.com/user-attachments/assets/7639696e-ec92-4097-955c-567a077e03cb" />
+图像：
+<img width="627" height="446" alt="Image" src="https://github.com/user-attachments/assets/771e93e9-b5cb-4c38-ad42-8ec190b2ae78" />
+### 用处
+tanh 的输出间隔为 1，并且整个函数以 0 为中心，比 sigmoid 函数更好；在 tanh 图中，负输入将被强映射为负，而零输入被映射为接近零。
+
+
+## 3.ReLU函数
+数学表达式：
+<img width="165" height="43" alt="Image" src="https://github.com/user-attachments/assets/ff0276cc-e1d8-4e0b-927b-7cad3567bf67" />
+图像：
+<img width="602" height="452" alt="Image" src="https://github.com/user-attachments/assets/6877b732-67e2-4ea9-86f8-82cef625300b" />
+### 用处
+ReLU解决了梯度消失的问题，当输入值为正时，神经元不会饱和。由于ReLU线性、非饱和的性质，在SGD中能够快速收敛。计算复杂度低，不需要进行指数运算。
+### 缺点
+与Sigmoid一样，其输出不是以0为中心的。Dead ReLU 问题。当输入为负时，梯度为0。这个神经元及之后的神经元梯度永远为0，不再对任何数据有所响应，导致相应参数永远不会被更新。
+
+## 4.Leaky Relu函数
+数学表达式：
+<img width="168" height="40" alt="Image" src="https://github.com/user-attachments/assets/52d0f5b9-0536-4676-ab41-85c0832ccad7" />
+图像：
+<img width="564" height="443" alt="Image" src="https://github.com/user-attachments/assets/7dbb69b1-b462-41f5-ac98-03ade0a8c00e" />
+### 用处
+解决了ReLU输入值为负时神经元出现的死亡的问题
+### 缺点
+函数中的α，需要通过先验知识人工赋值（一般设为0.01）。有些近似线性，导致在复杂分类中效果不好。
+
+## 5.Softmax函数
+数学表达式：
+<img width="191" height="59" alt="Image" src="https://github.com/user-attachments/assets/5c9a6a2f-1177-4a43-a0ec-81b8fe64eda7" />
+图像：
+<img width="412" height="298" alt="Image" src="https://github.com/user-attachments/assets/387e15f3-8578-4db8-aed0-6f3f803a5033" />
+### 用处
+Softmax函数常在神经网络输出层充当激活函数，将输出层的值通过激活函数映射到0-1区间，将神经元输出构造成概率分布，用于多分类问题中，Softmax激活函数映射值越大，则真实类别可能性越大。
+
+# 四.数据分类与回归
+在机器学习中，分类和回归是两种核心任务，分别用于处理离散和连续的目标变量。分类任务预测类别标签，而回归任务预测连续数值。以下是它们的主要特点、常用算法及应用场景。
+## 1.分类任务
+分类的目标是将数据分配到预定义的类别中。目标变量是离散的，例如垃圾邮件检测（是/否）或图像分类（猫/狗）。
+常用算法包括：
+逻辑回归：适合简单的二分类问题。
+决策树与随机森林：处理复杂分类任务，具有较强的鲁棒性。
+支持向量机（SVM）：适合高维数据，尤其是线性不可分问题。
+梯度提升（如XGBoost、LightGBM）：在复杂数据上表现优异。
+神经网络：用于处理复杂的非线性关系。
+## 2.回归任务
+回归的目标是预测连续数值，例如房价预测或销售额估计。目标变量是连续的。
+常用算法包括：
+线性回归：适合简单线性关系。
+岭回归与Lasso：用于特征选择和减少过拟合。
+决策树回归与随机森林回归：处理非线性关系。
+梯度提升回归（如XGBoost、LightGBM）：在复杂数据上表现优异。
+神经网络：适合复杂的非线性回归任务。
+
+# 五.机器学习算法
+## 1.线性回归 (Linear Regression) 
+是一种用于预测连续值的最基本的机器学习算法，它假设目标变量 y 和特征变量 x 之间存在线性关系，并试图找到一条最佳拟合直线来描述这种关系。
+### 如何求解线性回归？
+1）最小二乘法
+最小二乘法是一种常用的求解线性回归的方法，它通过求解以下方程来找到最佳的 ( w ) 和 ( b )。
+最小二乘法的目标是最小化残差平方和（RSS），其公式为：
+<img width="204" height="77" alt="Image" src="https://github.com/user-attachments/assets/10d2dd94-19b1-43e6-9953-aa3cc51ceb41" />
+2）梯度下降法
+梯度下降法的目标是最小化损失函数 。对于线性回归问题，通常使用均方误差（MSE）作为损失函数：
+<img width="252" height="68" alt="Image" src="https://github.com/user-attachments/assets/0f114621-d287-455a-881e-615c393a5b3a" />
+梯度是损失函数对参数的偏导数，表示损失函数在参数空间中的变化方向。对于线性回归，梯度计算如下：
+<img width="225" height="134" alt="Image" src="https://github.com/user-attachments/assets/e17506bf-6b64-4643-b7b1-3863146798bf" />
+梯度下降法通过以下规则更新参数 w 和 b：
+<img width="170" height="101" alt="Image" src="https://github.com/user-attachments/assets/e654c0bc-5b35-4b91-a607-f31c31d6b5a7" />
+α 是学习率（learning rate），控制每次更新的步长。
+
+## 2.决策树（Decision Tree）
+是一种常用的机器学习算法，广泛应用于分类和回归问题。决策树通过树状结构来表示决策过程，每个内部节点代表一个特征或属性的测试，每个分支代表测试的结果，每个叶节点代表一个类别或值。
+### 工作原理：
+决策树通过递归地将数据集分割成更小的子集来构建树结构。具体步骤如下：
+选择最佳特征：根据某种标准（如信息增益、基尼指数等）选择最佳特征进行分割。
+分割数据集：根据选定的特征将数据集分成多个子集。
+递归构建子树：对每个子集重复上述过程，直到满足停止条件（如所有样本属于同一类别、达到最大深度等）。
+生成叶节点：当满足停止条件时，生成叶节点并赋予类别或值。
+
+## 3.K 近邻算法（K-Nearest Neighbors，简称 KNN）
+是一种简单且常用的分类和回归算法。K 近邻算法属于监督学习的一种，核心思想是通过计算待分类样本与训练集中各个样本的距离，找到距离最近的 K 个样本，然后根据这 K 个样本的类别或值来预测待分类样本的类别或值。
+### 基本原理
+KNN 算法的基本原理可以概括为以下几个步骤：
+计算距离：计算待分类样本与训练集中每个样本的距离。常用的距离度量方法有欧氏距离、曼哈顿距离等。
+选择 K 个最近邻：根据计算出的距离，选择距离最近的 K 个样本。
+投票或平均：对于分类问题，K 个最近邻中出现次数最多的类别即为待分类样本的类别；对于回归问题，K 个最近邻的值的平均值即为待分类样本的值。
+
+## 4.K-means 聚类（K-means Clustering）
+K-means 是一种基于中心点的聚类算法，通过不断调整簇的中心点，使每个簇中的数据点尽可能靠近簇中心。
+
+## 5.支持向量机（support vector machines, SVM）
+SVM学习的基本想法是求解能够正确划分训练数据集并且几何间隔最大的分离超平面。
+
+# 六.全卷积网络
+FCN将传统CNN后面的全连接层换成了卷积层，这样网络的输出将是热力图而非类别；同时，为解决卷积和池化导致图像尺寸的变小，使用上采样方式对图像尺寸进行恢复。
+## 网络结构：
+FCN网络结构主要分为两个部分：全卷积部分和反卷积部分。其中全卷积部分为一些经典的CNN网络（如VGG，ResNet等），用于提取特征；反卷积部分则是通过上采样得到原尺寸的语义分割图像。FCN的输入可以为任意尺寸的彩色图像，输出与输入尺寸相同，通道数为n（目标类别数）+1（背景）。FCN网络结构如下：
+<img width="1026" height="412" alt="Image" src="https://github.com/user-attachments/assets/04bc3120-388d-48d5-bd91-106a5e2eb334" />
+## 上采样 Upsampling
+在卷积过程的卷积操作和池化操作会使得特征图的尺寸变小，为得到原图像大小的稠密像素预测，需要对得到的特征图进行上采样操作。可通过双线性插值（Bilinear）实现上采样，且双线性插值易于通过固定卷积核的转置卷积（transposed convolution）实现，转置卷积即为反卷积（deconvolution）。在论文中，作者并没有固定卷积核，而是让卷积核变成可学习的参数。转置卷积操作过程如下：
+<img width="480" height="224" alt="Image" src="https://github.com/user-attachments/assets/81895020-e93e-496f-8a61-e2ff2238d743" />
+
+# 七.损失函数
+## 1.均方误差（mean squared error，MSE）
+均方误差如下式所示：
+<img width="877" height="163" alt="Image" src="https://github.com/user-attachments/assets/144ae70d-3562-4089-b8c6-648b77376e39" />
+## 2.交叉熵（cross entropy error）
+<img width="383" height="102" alt="Image" src="https://github.com/user-attachments/assets/00b898fa-e484-49df-8a21-ffd4ab088e3e" />
+这里，log表示以e为底数的自然对数。yk是神经网络的输出，tk是正确解标签。并且，tk中只有正确解标签的索引为1，其他均为0（one-hot表示）。因此只计算对应正确解标签的输出的自然对数。
+
+# 八.卷积公式
+<img width="673" height="194" alt="Image" src="https://github.com/user-attachments/assets/8d6b7cc1-2d09-460d-93fa-e504b05b2a1a" />
+
+输入大小：(28, 31)；填充：2；步幅：3；滤波器大小：(5, 5)
+
+<img width="319" height="131" alt="Image" src="https://github.com/user-attachments/assets/28b29e97-d789-4c91-a5c8-50387ed78dda" />
+
+# 九.张量、张量索引、切片、张量维度变换
+https://blog.csdn.net/m0_48241022/article/details/132729561
+

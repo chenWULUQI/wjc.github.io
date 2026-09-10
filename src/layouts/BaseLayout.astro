@@ -1,0 +1,85 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config';
+import { absoluteUrl } from '../lib/urls';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  image = absoluteUrl('/og.png'),
+  type = 'website',
+} = Astro.props;
+const pageTitle = title === SITE.title ? title : `${title} · ${SITE.shortTitle}`;
+const canonical = new URL(Astro.url.pathname, SITE.origin).toString();
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f6f3eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151917" media="(prefers-color-scheme: dark)" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.title} RSS`} href={absoluteUrl('/rss.xml')} />
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <slot name="head" />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      const setupCodeCopy = () => {
+        document.querySelectorAll('pre').forEach((pre) => {
+          if (pre.querySelector('.copy-code')) return;
+          const button = document.createElement('button');
+          button.className = 'copy-code';
+          button.type = 'button';
+          button.textContent = '复制';
+          button.setAttribute('aria-label', '复制代码');
+          button.addEventListener('click', async () => {
+            const code = pre.querySelector('code')?.textContent ?? '';
+            await navigator.clipboard.writeText(code);
+            button.textContent = '已复制';
+            window.setTimeout(() => { button.textContent = '复制'; }, 1600);
+          });
+          pre.append(button);
+        });
+      };
+      setupCodeCopy();
+    </script>
+  </body>
+</html>

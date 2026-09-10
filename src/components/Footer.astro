@@ -1,0 +1,14 @@
+---
+import { SITE } from '../config';
+import { withBase } from '../lib/urls';
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>© {new Date().getFullYear()} {SITE.author} · 用文字保存思考的过程</p>
+    <div class="footer-links">
+      <a href={withBase('/rss.xml')}>RSS</a>
+      <a href={SITE.repository} rel="me">GitHub</a>
+    </div>
+  </div>
+</footer>

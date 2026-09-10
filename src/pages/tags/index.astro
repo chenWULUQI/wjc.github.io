@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts } from '../../lib/posts';
+import { withBase } from '../../lib/urls';
+
+const posts = await getPosts();
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+}
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh-CN'));
+---
+
+<BaseLayout title="标签" description="从主题标签进入 WJC 的文章与笔记。">
+  <div class="page-shell reading-column">
+    <header class="page-header">
+      <p class="eyebrow">Tags / {tags.length}</p>
+      <h1>标签</h1>
+      <p>标签从文章元数据自动生成，是另一种非线性的阅读路径。</p>
+    </header>
+    <div class="tag-cloud">
+      {tags.map(([tag, count]) => (
+        <a class="tag-item" href={withBase(`/tags/${encodeURIComponent(tag)}/`)}>
+          <span>#{tag}</span><small>{count}</small>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chenwuluqi.github.io/wjc.github.io/sitemap-index.xml

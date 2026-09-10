@@ -1,0 +1,61 @@
+---
+import { NAVIGATION, SITE } from '../config';
+import { withBase } from '../lib/urls';
+
+const current = Astro.url.pathname;
+const isActive = (href: string) => {
+  const target = withBase(href);
+  return href === '/' ? current === target : current.startsWith(target);
+};
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="wordmark" href={withBase('/')} aria-label={`${SITE.title} 首页`}>
+      <span class="wordmark-mark" aria-hidden="true">文</span>
+      <span>{SITE.shortTitle}</span>
+    </a>
+    <nav class="site-nav" aria-label="主导航">
+      {NAVIGATION.map((item) => (
+        <a href={withBase(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换颜色主题">
+      <span class="theme-dot" aria-hidden="true"></span>
+      <span data-theme-label>系统</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const label = button?.querySelector<HTMLElement>('[data-theme-label]');
+  const labels = { system: '系统', light: '浅色', dark: '深色' } as const;
+  const themes = ['system', 'light', 'dark'] as const;
+
+  const getTheme = () => {
+    const value = localStorage.getItem('theme');
+    return value === 'light' || value === 'dark' ? value : 'system';
+  };
+  const updateLabel = () => {
+    const theme = getTheme();
+    if (label) label.textContent = labels[theme];
+    if (button) button.title = `当前：${labels[theme]}；点击切换`;
+  };
+  updateLabel();
+
+  button?.addEventListener('click', () => {
+    const currentTheme = getTheme();
+    const next = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+    if (next === 'system') {
+      localStorage.removeItem('theme');
+      delete document.documentElement.dataset.theme;
+    } else {
+      localStorage.setItem('theme', next);
+      document.documentElement.dataset.theme = next;
+    }
+    updateLabel();
+  });
+</script>

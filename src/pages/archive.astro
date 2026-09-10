@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPosts, postSlug } from '../lib/posts';
+import { withBase } from '../lib/urls';
+
+const posts = await getPosts();
+const archive = new Map<number, Map<number, typeof posts>>();
+for (const post of posts) {
+  const year = post.data.publishDate.getUTCFullYear();
+  const month = post.data.publishDate.getUTCMonth() + 1;
+  if (!archive.has(year)) archive.set(year, new Map());
+  const months = archive.get(year)!;
+  if (!months.has(month)) months.set(month, []);
+  months.get(month)!.push(post);
+}
+---
+
+<BaseLayout title="文章归档" description="按年份与月份浏览全部文章。">
+  <div class="page-shell reading-column">
+    <header class="page-header">
+      <p class="eyebrow">Archive / {posts.length}</p>
+      <h1>文章归档</h1>
+      <p>时间不是分类，却最能看见关注如何缓慢移动。</p>
+    </header>
+    {[...archive.entries()].map(([year, months]) => (
+      <section class="archive-year" aria-labelledby={`year-${year}`}>
+        <h2 id={`year-${year}`}>{year}</h2>
+        {[...months.entries()].map(([month, monthPosts]) => (
+          <div class="archive-month">
+            <h3>{String(month).padStart(2, '0')} 月</h3>
+            <ul>
+              {monthPosts.map((post) => (
+                <li>
+                  <a href={withBase(`/posts/${postSlug(post)}/`)}>{post.data.title}</a>
+                  <time datetime={post.data.publishDate.toISOString()}>{String(post.data.publishDate.getUTCDate()).padStart(2, '0')} 日</time>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    ))}
+  </div>
+</BaseLayout>

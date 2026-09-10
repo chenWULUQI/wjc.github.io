@@ -1,0 +1,41 @@
+---
+import type { Post } from '../lib/posts';
+import { formatDate, postSlug, readingMinutes } from '../lib/posts';
+import { CATEGORY_LABELS } from '../config';
+import { withBase } from '../lib/urls';
+
+interface Props {
+  posts: Post[];
+  emptyText?: string;
+}
+
+const { posts, emptyText = '这里还没有文章。' } = Astro.props;
+---
+
+{posts.length === 0 ? (
+  <p class="empty-state">{emptyText}</p>
+) : (
+  <ol class="post-list">
+    {posts.map((post) => (
+      <li class="post-list-item">
+        <div class="post-list-main">
+          <div class="post-list-kicker">
+            <span>{CATEGORY_LABELS[post.data.category]}</span>
+            {post.data.draft && <span class="draft-label">草稿</span>}
+          </div>
+          <h2><a href={withBase(`/posts/${postSlug(post)}/`)}>{post.data.title}</a></h2>
+          <p>{post.data.description}</p>
+          <div class="post-tags" aria-label="文章标签">
+            {post.data.tags.slice(0, 3).map((tag) => (
+              <a href={withBase(`/tags/${encodeURIComponent(tag)}/`)}>#{tag}</a>
+            ))}
+          </div>
+        </div>
+        <div class="post-list-meta">
+          <time datetime={post.data.publishDate.toISOString()}>{formatDate(post.data.publishDate)}</time>
+          <span>{readingMinutes(post)} 分钟</span>
+        </div>
+      </li>
+    ))}
+  </ol>
+)}

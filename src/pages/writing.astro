@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts';
+const posts = await getPosts();
+---
+
+<BaseLayout title="全部文章" description="WJC 的全部随笔、技术文章与学习笔记。">
+  <div class="page-shell reading-column">
+    <header class="page-header">
+      <p class="eyebrow">Writing / {posts.length}</p>
+      <h1>全部文章</h1>
+      <p>不按热度排序，只按时间保留持续思考的轨迹。</p>
+    </header>
+    <PostList posts={posts} />
+  </div>
+</BaseLayout>

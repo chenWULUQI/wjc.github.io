@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts, postSlug } from '../lib/posts';
+import { withBase } from '../lib/urls';
+
+const posts = await getPosts();
+const recentPosts = posts.slice(0, 6);
+const featuredPosts = posts.filter((post) => post.data.featured).slice(0, 3);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <p class="hero-kicker">WJC / PERSONAL NOTES</p>
+    <h1>把复杂的事，慢慢想清楚。</h1>
+    <p class="hero-description">这里记录技术、学习与生活中的长期思考。写下理解，也保留理解尚未完成的部分。</p>
+    <p class="hero-note">持续写作，偶尔更新</p>
+  </section>
+
+  <section class="home-section" aria-labelledby="recent-heading">
+    <div class="section-heading">
+      <h2 id="recent-heading">最近文章</h2>
+      <a href={withBase('/writing/')}>查看全部 →</a>
+    </div>
+    <PostList posts={recentPosts} />
+  </section>
+
+  {featuredPosts.length > 0 && (
+    <section class="home-section" aria-labelledby="featured-heading">
+      <div class="section-heading">
+        <h2 id="featured-heading">精选阅读</h2>
+        <span class="eyebrow">Selected</span>
+      </div>
+      <ol class="featured-list">
+        {featuredPosts.map((post, index) => (
+          <li>
+            <span class="featured-index">0{index + 1}</span>
+            <h3><a href={withBase(`/posts/${postSlug(post)}/`)}>{post.data.title}</a></h3>
+            <p>{post.data.description}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )}
+</BaseLayout>

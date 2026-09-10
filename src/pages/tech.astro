@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts';
+const posts = (await getPosts()).filter((post) => post.data.category === 'tech');
+---
+
+<BaseLayout title="技术文章" description="关于人工智能、工程实践与计算机科学的技术文章。">
+  <div class="page-shell reading-column">
+    <header class="page-header">
+      <p class="eyebrow">Technology / {posts.length}</p>
+      <h1>技术文章</h1>
+      <p>理解原理，记录实践，也诚实标注那些仍在变化的结论。</p>
+    </header>
+    <PostList posts={posts} emptyText="技术文章正在整理中。" />
+  </div>
+</BaseLayout>

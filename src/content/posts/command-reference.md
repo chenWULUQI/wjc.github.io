@@ -1,0 +1,24 @@
+---
+title: "常用命令及网址备忘"
+description: "开发环境中常用命令、镜像源与资料入口的备忘。"
+publishDate: "2025-10-21"
+updatedDate: "2025-10-21"
+category: "notes"
+tags: ["命令行","工具","备忘"]
+draft: false
+featured: false
+---
+
+1.pytorc各种版本轮子文件下载：https://download.pytorch.org/whl/torch/
+2.解压命令：tar -zxvf  ＋.tar文件、unzip ＋.zip文件
+3.查看自己的公网ip：curl cip.cc（wl通用）、curl ifconfig.me（w）
+4.编辑系统环境变量配置文件：vi /etc/profile
+5.pip install [whatyouwant] -i url
+阿里云 http://mirrors.aliyun.com/pypi/simple/
+中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/
+豆瓣(douban) http://pypi.douban.com/simple/
+清华大学 https://pypi.tuna.tsinghua.edu.cn/simple/
+中国科学技术大学 http://pypi.mirrors.ustc.edu.cn/simple/
+终端设置清华源镜像
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+

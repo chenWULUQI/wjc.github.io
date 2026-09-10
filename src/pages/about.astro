@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../config';
+---
+
+<BaseLayout title="关于" description="关于 WJC 与这个长期写作空间。">
+  <div class="page-shell reading-column">
+    <header class="page-header">
+      <p class="eyebrow">About</p>
+      <h1>关于这里</h1>
+      <p>一个用于长期保存思考、技术实践与学习轨迹的个人空间。</p>
+    </header>
+    <div class="about-grid">
+      <section>
+        <h2>为什么写</h2>
+        <p>写作迫使模糊的理解变得具体。这里不追逐更新频率，更在意一篇文章是否经得起日后的重新阅读。</p>
+        <p>主题主要包括人工智能、软件工程、学习笔记，以及一些无法被归入技术分类的生活观察。</p>
+      </section>
+      <section>
+        <h2>关于站点</h2>
+        <p>本站使用 Astro 与 Markdown 构建，源码托管在 GitHub，并由 GitHub Actions 自动发布到 GitHub Pages。</p>
+        <p>它不使用数据库、不需要常驻服务器，也不依赖个人电脑在线。内容永远以可迁移的纯文本为核心。</p>
+        <p><a href={SITE.repository}>在 GitHub 查看源码 →</a></p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
