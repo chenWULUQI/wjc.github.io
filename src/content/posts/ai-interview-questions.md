@@ -8,7 +8,7 @@ category: "notes"
 tags: ["AI","面试","学习笔记"]
 draft: false
 featured: false
----------------
+---
 
 # 1. python语言的优点及缺点。
 
