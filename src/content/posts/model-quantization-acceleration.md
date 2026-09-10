@@ -25,7 +25,7 @@ fp16格式存储数据过程：
 2.确定符号位。<br>
 为正，即第一位为0<br>
 3.计算阶码。<br>
-<img width="164" height="40" alt="Image" src="https://github.com/user-attachments/assets/55e2e4df-5a45-4b8d-bedb-78086bec94b0" />
+<img width="164" height="40" alt="Image" src="https://github.com/user-attachments/assets/55e2e4df-5a45-4b8d-bedb-78086bec94b0" /><br>
 <img width="464" height="148" alt="Image" src="https://github.com/user-attachments/assets/bbf95788-4d40-4931-9525-f84c6916df9e" /><br>
 4.计算尾数（即小数部分）。<br>
 <img width="518" height="155" alt="Image" src="https://github.com/user-attachments/assets/7efb6f92-afd9-4191-bd62-353c33d484d4" /><br>
