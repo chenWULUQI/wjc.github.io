@@ -12,7 +12,7 @@ featured: true
 # 一，模型量化
 1.模型量化是将浮点数值转化为定点数值，同时尽可能减少计算精度损失的方法。具体而言，模型量化是一种压缩网络参数的方式，它将神经网络的参数（weight）、激活（activation）等原本用浮点表示的量值换用定点（整型）表示，在计算过程中，再将定点数据反量化回浮点数据，得到结果。
 fp16格式存储数据过程：
-<img width="740" height="349" alt="Image" src="https://github.com/user-attachments/assets/47e889d9-280d-4a7f-aaf3-7b6bb54e9658" />
+<img width="740" height="349" alt="Image" src="https://github.com/user-attachments/assets/47e889d9-280d-4a7f-aaf3-7b6bb54e9658" /><br>
 共分为五步：1.转成二进制。<br>2.确定符号位。3.计算阶码（即指数部分的偏移量）。4.计算尾数（即小数部分）5.拼接在一起表示。
 以6.5为例：
 1.转成二进制。
